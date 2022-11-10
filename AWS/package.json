@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "pg": "^8.8.0"
+  },
+  "name": "music-affect-stuff",
+  "version": "1.0.0",
+  "main": "test_connect.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
