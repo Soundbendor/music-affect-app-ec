@@ -1,6 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-void main() {
+
+Future<http.Response> fetchData() {
+  return http.get(Uri.parse('https://97f186enh3.execute-api.us-west-2.amazonaws.com/test/helloworld'));
+}
+void main() async {
+  var data = await fetchData();
+  if (kDebugMode) {
+    print(data.body);
+  }
   runApp(const MyApp());
 }
 
