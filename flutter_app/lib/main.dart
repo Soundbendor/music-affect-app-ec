@@ -107,10 +107,13 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(affectDataArray
-                .map((item) => item.map((x) => x.toStringAsFixed(2)))
-                .toList()[affectDataArray.length - 1]
-                .toString()),
+            Text(affectDataArray.isNotEmpty
+                ? affectDataArray
+                    .map((item) => item.map((x) => x.toStringAsFixed(2)))
+                    .toList()
+                    .last
+                    .toString()
+                : ""),
             Tapper(addDataToArray: addDataToArray)
           ],
         ),
