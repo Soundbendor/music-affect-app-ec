@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Tapper extends StatefulWidget {
-  const Tapper({Key? key}) : super(key: key);
+  final void Function(List<double> data) addDataToArray;
+  const Tapper({Key? key, required this.addDataToArray}) : super(key: key);
 
   @override
   State<Tapper> createState() => _TapperState();
@@ -10,6 +11,7 @@ class Tapper extends StatefulWidget {
 class _TapperState extends State<Tapper> {
   final gridSize = 180.0;
   final circleRadius = 0.0;
+  double count = 0.0;
   @override
   Widget build(BuildContext context) {
     return Listener(
@@ -18,8 +20,13 @@ class _TapperState extends State<Tapper> {
           print("Global position x:${event.position.dx}, y:${event.position.dy}");
           // Position relative to where this widget starts.
           print("Relative position: x:${event.localPosition.dx}, y:${event.localPosition.dy}");
-          print(((event.localPosition.dy - 180) * -1) / 180 );
-          print(((event.localPosition.dx - 17) - 180) / 180);
+
+          var x = ((event.localPosition.dx - 17) - 180) / 180;
+          var y = ((event.localPosition.dy - 180) * -1) / 180;
+          widget.addDataToArray([count, x, y]);
+          setState(() {
+            count += 1;
+          });
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

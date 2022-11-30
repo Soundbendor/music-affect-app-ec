@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/tapper.dart';
 import 'package:http/http.dart' as http;
 
-
 Future<http.Response> fetchData() {
-  return http.get(Uri.parse('https://97f186enh3.execute-api.us-west-2.amazonaws.com/test/helloworld'));
+  return http.get(Uri.parse(
+      'https://97f186enh3.execute-api.us-west-2.amazonaws.com/test/helloworld'));
 }
+
 void main() async {
   var data = await fetchData();
   if (kDebugMode) {
@@ -59,16 +60,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final List<List<double>> affectDataArray = [];
 
-  void _incrementCounter() {
+  void addDataToArray(List<double> data) {
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+      affectDataArray.add(data);
     });
   }
 
@@ -105,8 +106,12 @@ class _MyHomePageState extends State<MyHomePage> {
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Tapper(),
+          children: <Widget>[
+            Text(affectDataArray
+                .map((item) => item.map((x) => x.toStringAsFixed(2)))
+                .toList()[affectDataArray.length - 1]
+                .toString()),
+            Tapper(addDataToArray: addDataToArray)
           ],
         ),
       ),
