@@ -1,42 +1,43 @@
 'use strict';
-console.log('Loading hello world function');
- 
+console.log('Loading function');
+const { processResponse } = require('./add_data');
+const { readAllSongs, readAllResponses, readAllResponsesOld }  = require('./read_data');
 exports.handler = async (event) => {
-    let name = "you";
-    let city = 'World';
-    let time = 'day';
-    let day = '';
+    
     let responseCode = 200;
+    let response_body = ""
     console.log("request: " + JSON.stringify(event));
     
-    if (event.queryStringParameters && event.queryStringParameters.name) {
-        console.log("Received name: " + event.queryStringParameters.name);
-        name = event.queryStringParameters.name;
-    }
+    // this is not exactly how this will work, this is temporary for easy testing...
     
-    if (event.queryStringParameters && event.queryStringParameters.city) {
-        console.log("Received city: " + event.queryStringParameters.city);
-        city = event.queryStringParameters.city;
-    }
-    
-    if (event.headers && event.headers['day']) {
-        console.log("Received day: " + event.headers.day);
-        day = event.headers.day;
-    }
-    
-    if (event.body) {
-        let body = JSON.parse(event.body)
-        if (body.time) 
-            time = body.time;
-    }
- 
-    let greeting = `Good ${time}, ${name} of ${city}.`;
-    if (day) greeting += ` Happy ${day}!`;
+    // read data
+    if(event.httpMethod == "GET") {
+        console.log("GET");
+        let res = await readAllResponses()
+        console.log("Retrieved data");
+        console.log(res);
+        response_body = res;
+        
+    // submit app data
+    } else if (event.httpMethod == "POST") {
+        console.log("POST");
+        // get all client user response data from request body
+        let app_data = event.body;
+        
+        // break into affect data, song data, user data
+        let affect_data = app_data.affect_data;
+        let song_data = app_data.song_data;
+        let user_data = app_data.user_data;
+        
+        let res = await processResponse(affect_data, song_data, user_data)
+        console.log("Logged app data")
+        console.log(res);
+        
+        response_body = "Success (?)"
 
-    let responseBody = {
-        message: greeting,
-        input: event
-    };
+    } else {
+        console.log("No HTTP method specified")
+    }
     
     // The output from a Lambda proxy integration must be 
     // in the following JSON object. The 'headers' property 
@@ -47,9 +48,9 @@ exports.handler = async (event) => {
     let response = {
         statusCode: responseCode,
         headers: {
-            "x-custom-header" : "my custom header value"
+            "x-custom-header" : "example-header"
         },
-        body: JSON.stringify(responseBody)
+        body: JSON.stringify(response_body)
     };
     console.log("response: " + JSON.stringify(response))
     return response;
