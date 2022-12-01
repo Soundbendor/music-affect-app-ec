@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/tapper.dart';
@@ -107,6 +109,25 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            MaterialButton(onPressed: () async {
+              var url = Uri.https('97f186enh3.execute-api.us-west-2.amazonaws.com', 'test/helloworld');
+              var response = await http.post(url, body: jsonEncode({
+                "user_data": {
+                  "user_id": 256,
+                  "location": "nowhere"
+                },
+                "song_data": {
+                  "song_id": 2,
+                  "title": "Example Song",
+                  "artist": "Example Artist",
+                  "genre": "Example Genre",
+                  "seconds": 256
+                },
+                "response_data": affectDataArray
+              }));
+              print('Response status: ${response.statusCode}');
+              print('Response body: ${response.body}');
+            }, child: Text("send request")),
             Text(affectDataArray.isNotEmpty
                 ? affectDataArray
                     .map((item) => item.map((x) => x.toStringAsFixed(2)))
