@@ -1,6 +1,7 @@
 const { getClient } = require('./get_client');
 
-module.exports.readAllResponses = async () => {
+//Deprecated
+readAllResponsesOld = async () => {
     let client;
 
     let retVal = getClient()
@@ -19,7 +20,18 @@ module.exports.readAllResponses = async () => {
     return retVal;
 }
 
-module.exports.readAllSongs = async () => {
+//Spits out an array containing every row in the response table
+module.exports.readAllResponses = async () => {
+    let client = await getClient();
+
+    let retVal = await client.query('SELECT * FROM Responses');
+
+    client.end();
+    return retVal.rows;
+}
+
+//Unused
+readAllSongs = async () => {
     let client;
 
     let retVal = getClient()
