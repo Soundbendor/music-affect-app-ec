@@ -38,6 +38,10 @@ android {
         jvmTarget = '1.8'
     }
 
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -51,6 +55,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+//        manifestPlaceholders += [redirectSchemeName: "spotify-sdk", redirectHostName: "auth"]
     }
 
     buildTypes {
@@ -68,4 +73,9 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "com.spotify.android:auth:<version>"
+}
+
+repositories {
+    mavenCentral()
 }

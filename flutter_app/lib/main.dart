@@ -1,9 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/tapper.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:spotify_sdk/models/connection_status.dart';
+import 'package:spotify_sdk/models/image_uri.dart';
+import 'package:spotify_sdk/models/player_state.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
 
 Future<http.Response> fetchData() {
   return http.get(Uri.parse(
@@ -15,6 +18,12 @@ void main() async {
   if (kDebugMode) {
     print(data.body);
   }
+  await dotenv.load(fileName: '.env');
+  var result = await SpotifySdk.connectToSpotifyRemote(
+      clientId: dotenv.env['CLIENT_ID'].toString(),
+      redirectUrl: dotenv.env['REDIRECT_URL'].toString());
+
+  print(result);
   runApp(const MyApp());
 }
 
@@ -64,6 +73,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<List<double>> affectDataArray = [];
 
+  ImageUri? currentTrackImageUri;
+
+  bool _connected = false;
+
   void addDataToArray(List<double> data) {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -108,26 +121,82 @@ class _MyHomePageState extends State<MyHomePage> {
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            MaterialButton(onPressed: () async {
-              var url = Uri.https('97f186enh3.execute-api.us-west-2.amazonaws.com', 'test/helloworld');
-              var response = await http.post(url, body: jsonEncode({
-                "user_data": {
-                  "user_id": 256,
-                  "location": "nowhere"
-                },
-                "song_data": {
-                  "song_id": 2,
-                  "title": "Example Song",
-                  "artist": "Example Artist",
-                  "genre": "Example Genre",
-                  "seconds": 256
-                },
-                "response_data": affectDataArray
-              }));
-              print('Response status: ${response.statusCode}');
-              print('Response body: ${response.body}');
-            }, child: Text("send request")),
+          children:[
+            // Here we get the connection status
+            StreamBuilder<ConnectionStatus>(
+              stream: SpotifySdk.subscribeConnectionStatus(),
+              builder: (context, snapshot) {
+                _connected = false;
+                var data = snapshot.data;
+                if (data != null) {
+                  _connected = data.connected;
+                }
+                // and then we subscribe to player state
+                return StreamBuilder<PlayerState>(
+                  stream: SpotifySdk.subscribePlayerState(),
+                  builder: (BuildContext context, AsyncSnapshot<PlayerState> snapshot) {
+                    var track = snapshot.data?.track;
+                    print(track?.uri);
+                    currentTrackImageUri = track?.imageUri;
+                    var playerState = snapshot.data;
+
+                    if (playerState == null || track == null) {
+                      return Center(
+                        child: Container(),
+                      );
+                    }
+
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                            '${track.name} by ${track.artist.name} from the album ${track.album.name}'),
+                        Center( child: Row(
+                          children: [
+                            IconButton(
+                              iconSize: 72,
+                              icon: const Icon(Icons.play_arrow),
+                              color: Colors.green,
+                              onPressed: () async {
+                                await SpotifySdk.play(spotifyUri: track?.uri ?? 'spotify:track:1bpnYrDCforv9ctJMzJRV8');
+                              },
+                            ),
+                            IconButton(
+                              iconSize: 72,
+                              icon: const Icon(Icons.pause),
+                              color: Colors.red,
+                              onPressed: () async {
+                                await SpotifySdk.pause();
+                              },
+                            ),
+                          ],
+                        )),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+            // MaterialButton(onPressed: () async {
+            //   var url = Uri.https('97f186enh3.execute-api.us-west-2.amazonaws.com', 'test/helloworld');
+            //   var response = await http.post(url, body: jsonEncode({
+            //     "user_data": {
+            //       "user_id": 256,
+            //       "location": "nowhere"
+            //     },
+            //     "song_data": {
+            //       "song_id": 2,
+            //       "title": "Example Song",
+            //       "artist": "Example Artist",
+            //       "genre": "Example Genre",
+            //       "seconds": 256
+            //     },
+            //     "response_data": affectDataArray
+            //   }));
+            //   print('Response status: ${response.statusCode}');
+            //   print('Response body: ${response.body}');
+            // }, child: Text("send request")),
             Text(affectDataArray.isNotEmpty
                 ? affectDataArray
                     .map((item) => item.map((x) => x.toStringAsFixed(2)))
