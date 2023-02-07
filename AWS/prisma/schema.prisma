@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model responses {
+  user_id       Int
+  song_id       Int
+  affect_data   Json?     @db.Json
+  date_recorded DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
+  songs         songs     @relation(fields: [song_id], references: [song_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_song")
+  users         users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user")
+
+  @@id([user_id, song_id])
+}
+
+model songs {
+  song_id   Int         @id
+  title     String?     @db.VarChar(255)
+  artist    String?     @db.VarChar(255)
+  genre     String?     @db.VarChar(255)
+  seconds   Int?
+  responses responses[]
+}
+
+model users {
+  user_id   Int         @id
+  location  String?     @db.VarChar(255)
+  responses responses[]
+}

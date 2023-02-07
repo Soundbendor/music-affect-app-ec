@@ -1,51 +1,60 @@
-const { getClient } = require('./get_client');
+const { PrismaClient } = require('@prisma/client')
 
-//Deprecated
-readAllResponsesOld = async () => {
-    let client;
-
-    let retVal = getClient()
-        .then(clientVal => {
-            client = clientVal;
-            return client.query('SELECT * FROM Responses')
-        })
-        .then(res => {
-            client.end();
-            return res.rows;
-        })
-        .catch(e => {
-            return e;
-        })
-
-    return retVal;
-}
-
-//Spits out an array containing every row in the response table
+//Returns an array containing every row in the response table
 module.exports.readAllResponses = async () => {
-    let client = await getClient();
+    let client = new PrismaClient();
 
-    let retVal = await client.query('SELECT * FROM Responses');
+    let retVal = await client.responses.findMany({
+        include: {
+            users: {
+                select: {
+                    location: true
+                }
+            },
+            songs: {
+                select: {
+                    title: true,
+                    artist: true,
+                    genre: true,
+                    seconds: true,
+                }
+            }
+        }
+    });
 
-    client.end();
-    return retVal.rows;
-}
-
-//Unused
-readAllSongs = async () => {
-    let client;
-
-    let retVal = getClient()
-        .then(clientVal => {
-            client = clientVal;
-            return client.query('SELECT * FROM Songs')
-        })
-        .then(res => {
-            client.end();
-            return res.rows;
-        })
-        .catch(e => {
-            return e;
-        })
-
+    await client.$disconnect();
     return retVal;
 }
+
+//Returns all responses of the given song_id
+module.exports.readResponsesOfSong = async(song_id) => {
+    let client = new PrismaClient();
+
+    let retVal = await client.responses.findMany({
+        where: {
+            song_id: song_id
+        }
+    });
+
+    await client.$disconnect();
+    return retVal;
+}
+
+async function readResponsesOfGenre(genre){
+    let client = new PrismaClient();
+
+    let retVal = await client.songs.findMany({
+        where: {
+            genre: genre
+        },
+
+        include: {
+            responses: true
+        }
+    });
+
+    await client.$disconnect();
+    return retVal;
+}
+
+module.exports.misc = {readResponsesOfGenre};
