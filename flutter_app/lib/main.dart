@@ -19,11 +19,16 @@ void main() async {
     print(data.body);
   }
   await dotenv.load(fileName: '.env');
-  var result = await SpotifySdk.connectToSpotifyRemote(
-      clientId: dotenv.env['CLIENT_ID'].toString(),
-      redirectUrl: dotenv.env['REDIRECT_URL'].toString());
+  try {
+    var result = await SpotifySdk.connectToSpotifyRemote(
+        clientId: dotenv.env['CLIENT_ID'].toString(),
+        redirectUrl: dotenv.env['REDIRECT_URL'].toString());
+    print(result);
+  }
+  catch (e){
+    print(e);
+  }
 
-  print(result);
   runApp(const MyApp());
 }
 
