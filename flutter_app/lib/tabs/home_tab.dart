@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/tabs/play_tab.dart';
-import 'package:flutter_app/widgets/play_route.dart';
+import 'package:flutter_app/routes/play_route.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
@@ -13,34 +12,34 @@ class HomeTab extends StatelessWidget {
       // Column is a vertical, linear layout.
       child: Column(
         children: [
-            Center(
-              child: Text(
-                "Soundbendor\nMusic Affect\nData Collection",
-                textAlign: TextAlign.center,
-                style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2.0),
-              ),
+          Center(
+            child: Text(
+              "Soundbendor\nMusic Affect\nData Collection",
+              textAlign: TextAlign.center,
+              style:
+                  DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2.0),
             ),
-            Center(
+          ),
+          Center(
               child: IconButton(
-                iconSize: 72,
-                icon: Icon(Icons.music_note),
-                color: Colors.green,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PlayRoute()),
-                  );
-                },
-              )
+            iconSize: 72,
+            icon: Icon(Icons.music_note),
+            color: Colors.green,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PlayRoute()),
+              );
+            },
+          )),
+          const Center(
+            child: Text(
+              "Welcome! \nPress the musical note button above to\n"
+              "get started recording your emotional\n"
+              "response to music!",
+              textAlign: TextAlign.center,
             ),
-            const Center(
-              child: Text(
-                "Welcome! \nPress the musical note button above to\n"
-                "get started recording your emotional\n"
-                "response to music!",
-                textAlign: TextAlign.center,
-              ),
-            ),
+          ),
         ],
       ),
     );

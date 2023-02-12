@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/tabs/home_tab.dart';
-import 'package:flutter_app/tabs/play_tab.dart';
 import 'package:flutter_app/widgets/tapper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
