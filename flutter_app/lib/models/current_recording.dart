@@ -12,8 +12,6 @@ class CurrentRecording {
   List<List<double>> get affectDataArray => _affectDataArray;
 
   void addDataToArray(List<double> data) {
-    print('LP $_affectDataArray');
-    print('DATA $data');
     _affectDataArray.add(data);
   }
   void resetData() => _affectDataArray.clear();
