@@ -23,7 +23,7 @@ class HomeTab extends StatelessWidget {
             Center(
               child: IconButton(
                 iconSize: 72,
-                icon: Icon(Icons.play_arrow),
+                icon: Icon(Icons.music_note),
                 color: Colors.green,
                 onPressed: () {
                   Navigator.push(
@@ -35,7 +35,7 @@ class HomeTab extends StatelessWidget {
             ),
             const Center(
               child: Text(
-                "Welcome! Press the Play button above to\n"
+                "Welcome! \nPress the musical note button above to\n"
                 "get started recording your emotional\n"
                 "response to music!",
                 textAlign: TextAlign.center,
