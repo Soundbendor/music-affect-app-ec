@@ -1,12 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/tabs/home_tab.dart';
-import 'package:flutter_app/widgets/tapper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:spotify_sdk/models/connection_status.dart';
-import 'package:spotify_sdk/models/image_uri.dart';
-import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
 Future<http.Response> fetchData() {
@@ -25,8 +21,7 @@ void main() async {
         clientId: dotenv.env['CLIENT_ID'].toString(),
         redirectUrl: dotenv.env['REDIRECT_URL'].toString());
     print(result);
-  }
-  catch (e){
+  } catch (e) {
     print(e);
   }
 
@@ -53,22 +48,20 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: DefaultTabController(length: 2, child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Music Affect Data'),
-          bottom: const TabBar(tabs: [
-            Tab(icon: Icon(Icons.home)),
-            Tab(icon: Icon(Icons.question_mark)),
-          ]),
-        ),
-        body:const Padding(padding: EdgeInsets.all(10),
-          child: TabBarView(children: [
-          HomeTab(),
-          Text('Tutorial')
-        ]),)
-      )),
+      home: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+              appBar: AppBar(
+                title: const Text('Music Affect Data'),
+                bottom: const TabBar(tabs: [
+                  Tab(icon: Icon(Icons.home)),
+                  Tab(icon: Icon(Icons.question_mark)),
+                ]),
+              ),
+              body: const Padding(
+                padding: EdgeInsets.all(10),
+                child: TabBarView(children: [HomeTab(), Text('Tutorial')]),
+              ))),
     );
   }
 }
-
-

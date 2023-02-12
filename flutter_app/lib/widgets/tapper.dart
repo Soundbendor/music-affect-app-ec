@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 
 import '../models/affect_coordinates.dart';
 
-
 class Tapper extends StatefulWidget {
   final void Function(List<double> data) addDataToArray;
   final bool shouldStartInterval;
-  const Tapper({Key? key, required this.addDataToArray, required this.shouldStartInterval}) : super(key: key);
+  const Tapper(
+      {Key? key,
+      required this.addDataToArray,
+      required this.shouldStartInterval})
+      : super(key: key);
 
   @override
   State<Tapper> createState() => _TapperState();
@@ -43,7 +46,7 @@ class _TapperState extends State<Tapper> {
       }
       // otherwise, lets cancel it and set the instance variable to null
       if (timer != null && !widget.shouldStartInterval) {
-        if(timer!.isActive) {
+        if (timer!.isActive) {
           timer?.cancel();
           timer = null;
         }
@@ -70,7 +73,6 @@ class _TapperState extends State<Tapper> {
 
   @override
   Widget build(BuildContext context) {
-
     return Listener(
         onPointerDown: (PointerDownEvent event) {
           // Global screen position.

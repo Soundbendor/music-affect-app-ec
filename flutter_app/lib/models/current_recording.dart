@@ -16,6 +16,7 @@ class CurrentRecording {
   void addDataToArray(List<double> data) {
     _affectDataArray.add(data);
   }
+
   /// reset the data in the array
   void resetData() => _affectDataArray.clear();
 
