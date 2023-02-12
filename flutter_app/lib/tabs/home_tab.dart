@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/tabs/play_tab.dart';
+import 'package:flutter_app/widgets/play_route.dart';
 
-class Homepage extends StatelessWidget {
-  const Homepage({super.key});
+class HomeTab extends StatelessWidget {
+  const HomeTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +20,22 @@ class Homepage extends StatelessWidget {
                 style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2.0),
               ),
             ),
-            const Center(
-              child: Icon(
-                Icons.music_note_rounded,
-                size: 50
+            Center(
+              child: IconButton(
+                iconSize: 72,
+                icon: Icon(Icons.play_arrow),
+                color: Colors.green,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PlayRoute()),
+                  );
+                },
               )
             ),
             const Center(
               child: Text(
-                "Welcome! Press the button above to\n"
+                "Welcome! Press the Play button above to\n"
                 "get started recording your emotional\n"
                 "response to music!",
                 textAlign: TextAlign.center,

@@ -1,8 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+
+import '../models/affect_coordinates.dart';
+
 
 class Tapper extends StatefulWidget {
   final void Function(List<double> data) addDataToArray;
-  const Tapper({Key? key, required this.addDataToArray}) : super(key: key);
+  final bool shouldStartInterval;
+  const Tapper({Key? key, required this.addDataToArray, required this.shouldStartInterval}) : super(key: key);
 
   @override
   State<Tapper> createState() => _TapperState();
@@ -11,9 +17,56 @@ class Tapper extends StatefulWidget {
 class _TapperState extends State<Tapper> {
   final gridSize = 180.0;
   final circleRadius = 0.0;
+  final coordinates = AffectCoordinates();
+  Timer? timer;
+
   double count = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (mounted) {
+      if (timer == null && widget.shouldStartInterval) {
+        collectDataOnInterval();
+      }
+      // if (timer != null && !widget.shouldStartInterval) {
+      //   if(timer!.isActive) {
+      //     timer?.cancel();
+      //     timer = null;
+      //   }
+      // }
+    }
+  }
+
+  void addCoordinatesOnTap(double x, double y) {
+    setState(() {
+      coordinates.updateCoordinates(x, y);
+    });
+  }
+
+  void collectDataOnInterval() {
+    Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() {
+        timer = t;
+        widget.addDataToArray(coordinates.generateArray());
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Listener(
         onPointerDown: (PointerDownEvent event) {
           // Global screen position.
@@ -25,10 +78,7 @@ class _TapperState extends State<Tapper> {
 
           var x = ((event.localPosition.dx - 17) - 180) / 180;
           var y = ((event.localPosition.dy - 180) * -1) / 180;
-          widget.addDataToArray([count, x, y]);
-          setState(() {
-            count += 1;
-          });
+          addCoordinatesOnTap(x, y);
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
