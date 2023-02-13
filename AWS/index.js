@@ -1,14 +1,12 @@
 'use strict';
 console.log('Loading function');
 const { processResponse } = require('./add_data');
-const { readAllSongs, readAllResponses, readAllResponsesOld }  = require('./read_data');
+const { readAllResponses }  = require('./read_data');
 exports.handler = async (event) => {
     
-    let responseCode = 200;
+    let statusCode = 200;
     let response_body = ""
     console.log("request: " + JSON.stringify(event));
-    
-    // this is not exactly how this will work, this is temporary for easy testing...
     
     // read data
     if(event.httpMethod == "GET") {
@@ -21,15 +19,13 @@ exports.handler = async (event) => {
     // submit app data
     } else if (event.httpMethod == "POST") {
         console.log("POST");
+
         // get all client user response data from request body
-        let app_data = event.body;
-        
-        // break into affect data, song data, user data
-        let affect_data = app_data.affect_data;
-        let song_data = app_data.song_data;
-        let user_data = app_data.user_data;
-        
+        const { body } = event;
+        const { affect_data, song_data, user_data } = body;
+
         let res = await processResponse(affect_data, song_data, user_data)
+
         console.log("Logged app data")
         console.log(res);
         
@@ -45,11 +41,9 @@ exports.handler = async (event) => {
     // ones. The 'body' property  must be a JSON string. For 
     // base64-encoded payload, you must also set the 'isBase64Encoded'
     // property to 'true'.
-    let response = {
-        statusCode: responseCode,
-        headers: {
-            "x-custom-header" : "example-header"
-        },
+    const response = {
+        statusCode,
+        headers: {},
         body: JSON.stringify(response_body)
     };
     console.log("response: " + JSON.stringify(response))
