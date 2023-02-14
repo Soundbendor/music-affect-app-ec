@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.soundbendor.flutter_app">
    <application
-        android:label="flutter_app"
+        android:label="Music Affect Data"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
