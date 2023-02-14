@@ -165,21 +165,21 @@ class _PlayRouteState extends State<PlayRoute> {
                                           MaterialButton(
                                               onPressed: () async {
                                                 // need to do something like this
-                                                // var url = Uri.https('97f186enh3.execute-api.us-west-2.amazonaws.com', 'test/helloworld');
-                                                // var response = await http.post(url, body: jsonEncode({
-                                                //     "user_data": {
-                                                //       "user_id": 256,
-                                                //       "location": "nowhere"
-                                                //     },
-                                                //     "song_data": {
-                                                //       "song_id": currentRecording.currentRecordingTrack?.uri,
-                                                //       "title": currentRecording.currentRecordingTrack?.name,
-                                                //       "artist": currentRecording.currentRecordingTrack?.artist,
-                                                //       "album": currentRecording.currentRecordingTrack?.album,
-                                                //       "ms": currentRecording.currentRecordingTrack?.duration,
-                                                //     },
-                                                //     "response_data": currentRecording.affectDataArray
-                                                //   }));
+                                                var url = Uri.https('97f186enh3.execute-api.us-west-2.amazonaws.com', 'test/helloworld');
+                                                await http.post(url, body: jsonEncode({
+                                                    "user_data": {
+                                                      "user_id": 256,
+                                                      "location": "nowhere"
+                                                    },
+                                                    "song_data": {
+                                                      "song_id": currentRecording.currentRecordingTrack?.uri,
+                                                      "title": currentRecording.currentRecordingTrack?.name,
+                                                      "artist": currentRecording.currentRecordingTrack?.artist,
+                                                      "album": currentRecording.currentRecordingTrack?.album,
+                                                      "ms": currentRecording.currentRecordingTrack?.duration,
+                                                    },
+                                                    "response_data": currentRecording.affectDataArray
+                                                  }));
 
                                                 print(
                                                     'Data recorded: ${currentRecording.affectDataArray}');
