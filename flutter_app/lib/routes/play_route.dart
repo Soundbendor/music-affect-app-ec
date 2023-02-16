@@ -12,6 +12,8 @@ import 'package:spotify_sdk/spotify_sdk.dart';
 import '../models/current_recording.dart';
 import '../widgets/tapper.dart';
 
+import 'dart:math';
+
 class PlayRoute extends StatefulWidget {
   const PlayRoute({super.key});
 
@@ -164,23 +166,25 @@ class _PlayRouteState extends State<PlayRoute> {
                                       ? [
                                           MaterialButton(
                                               onPressed: () async {
-                                                int? seconds = currentRecording.currentRecordingTrack?.duration;
                                                 var url = Uri.https('97f186enh3.execute-api.us-west-2.amazonaws.com', 'test/helloworld');
+                                                Random rand = Random();
                                                 await http.post(url, body: jsonEncode({
-                                                    "user_data": {
-                                                      "user_id": 256,
-                                                      "location": "nowhere"
-                                                    },
-                                                    "song_data": {
-                                                      "song_id": 1234,
-                                                      "title": track.name,
-                                                      "artist": track.artist,
-                                                      // "album": track.album,            // not stored at the moment
-                                                      "genre" : "default genre",          // doesn't look like a value we can get, placeholder until we change the database
-                                                      "seconds": track.duration ~/ 1000,  // Spotify SDK returns ms but we want to store seconds
-                                                    },
-                                                    "affect_data": currentRecording.affectDataArray
-                                                  }));
+                                                  "user_data": {
+                                                    "user_id": rand.nextInt(9999),
+                                                    "location": "nowhere"
+                                                  },
+                                                  "song_data": {
+                                                    "song_id": rand.nextInt(9999),
+                                                    "title": track.name,
+                                                    "artist": track.artist.name,
+                                                    // "album": track.album,            // not stored at the moment
+                                                    "genre" : "default genre",          // doesn't look like a value we can get, placeholder until we change the database
+                                                    "seconds": track.duration ~/ 1000,  // Spotify SDK returns ms but we want to store seconds
+                                                  },
+                                                  "affect_data": {
+                                                    "value": currentRecording.affectDataArray
+                                                  }
+                                                }));
 
                                                 print(
                                                     'Data recorded: ${currentRecording.affectDataArray}');
