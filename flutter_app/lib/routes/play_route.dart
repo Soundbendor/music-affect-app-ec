@@ -164,7 +164,7 @@ class _PlayRouteState extends State<PlayRoute> {
                                       ? [
                                           MaterialButton(
                                               onPressed: () async {
-                                                // need to do something like this
+                                                int? seconds = currentRecording.currentRecordingTrack?.duration;
                                                 var url = Uri.https('97f186enh3.execute-api.us-west-2.amazonaws.com', 'test/helloworld');
                                                 await http.post(url, body: jsonEncode({
                                                     "user_data": {
@@ -175,10 +175,11 @@ class _PlayRouteState extends State<PlayRoute> {
                                                       "song_id": currentRecording.currentRecordingTrack?.uri,
                                                       "title": currentRecording.currentRecordingTrack?.name,
                                                       "artist": currentRecording.currentRecordingTrack?.artist,
-                                                      "album": currentRecording.currentRecordingTrack?.album,
-                                                      "ms": currentRecording.currentRecordingTrack?.duration,
+                                                      // "album": currentRecording.currentRecordingTrack?.album,  // not stored at the moment
+                                                      "genre" : "default genre",                                  // doesn't look like a value we can get, placeholder until we change the database
+                                                      "seconds": (seconds == null ? null : seconds ~/ 1000),       // Spotify SDK returns ms but we want to store seconds
                                                     },
-                                                    "response_data": currentRecording.affectDataArray
+                                                    "affect_data": currentRecording.affectDataArray
                                                   }));
 
                                                 print(
