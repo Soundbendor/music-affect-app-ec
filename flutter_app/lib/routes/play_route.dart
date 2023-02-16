@@ -172,12 +172,12 @@ class _PlayRouteState extends State<PlayRoute> {
                                                       "location": "nowhere"
                                                     },
                                                     "song_data": {
-                                                      "song_id": currentRecording.currentRecordingTrack?.uri,
-                                                      "title": currentRecording.currentRecordingTrack?.name,
-                                                      "artist": currentRecording.currentRecordingTrack?.artist,
-                                                      // "album": currentRecording.currentRecordingTrack?.album,  // not stored at the moment
-                                                      "genre" : "default genre",                                  // doesn't look like a value we can get, placeholder until we change the database
-                                                      "seconds": (seconds == null ? null : seconds ~/ 1000),       // Spotify SDK returns ms but we want to store seconds
+                                                      "song_id": 1234,
+                                                      "title": track.name,
+                                                      "artist": track.artist,
+                                                      // "album": track.album,            // not stored at the moment
+                                                      "genre" : "default genre",          // doesn't look like a value we can get, placeholder until we change the database
+                                                      "seconds": track.duration ~/ 1000,  // Spotify SDK returns ms but we want to store seconds
                                                     },
                                                     "affect_data": currentRecording.affectDataArray
                                                   }));
@@ -185,7 +185,7 @@ class _PlayRouteState extends State<PlayRoute> {
                                                 print(
                                                     'Data recorded: ${currentRecording.affectDataArray}');
                                                 print(
-                                                    'Current Track: ${currentRecording.currentRecordingTrack.toString()}');
+                                                    'Current Track: ${track.name}');
                                                 print('Fake user data');
                                                 // go back to home page
                                                 Navigator.pop(context);
