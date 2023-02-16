@@ -6,7 +6,7 @@ exports.handler = async (event) => {
     
     let statusCode = 200;
     let response_body = ""
-    console.log("request: " + JSON.stringify(event));
+    console.log("request: " + (JSON.stringify(event)));
     
     // read data
     if(event.httpMethod == "GET") {
@@ -19,10 +19,12 @@ exports.handler = async (event) => {
     // submit app data
     } else if (event.httpMethod == "POST") {
         console.log("POST");
-
+        const body = JSON.parse(event.body)
+        console.log(body);
+        
         // get all client user response data from request body
-        const { body } = event;
-        const { affect_data, song_data, user_data } = body;
+        const { user_data, song_data, affect_data } = body;
+        console.log(song_data);
 
         let res = await processResponse(affect_data, song_data, user_data)
 
