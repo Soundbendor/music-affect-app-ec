@@ -166,23 +166,34 @@ class _PlayRouteState extends State<PlayRoute> {
                                       ? [
                                           MaterialButton(
                                               onPressed: () async {
-                                                var url = Uri.https('97f186enh3.execute-api.us-west-2.amazonaws.com', 'test/helloworld');
+                                                var url = Uri.https('qzb9rm0k6c.execute-api.us-west-2.amazonaws.com', 'test/resource');
                                                 Random rand = Random();
+
+                                                var valance = [];
+                                                var arousal = [];
+                                                var time_sampled = [];
+                                                for (var i = 0; i < currentRecording.affectDataArray.length; i++){
+                                                  time_sampled.add(currentRecording.affectDataArray[i][0]);
+                                                  valance.add(currentRecording.affectDataArray[i][1]);
+                                                  arousal.add(currentRecording.affectDataArray[i][2]);
+                                                }
+
                                                 await http.post(url, body: jsonEncode({
                                                   "user_data": {
                                                     "user_id": rand.nextInt(9999),
                                                     "location": "nowhere"
                                                   },
                                                   "song_data": {
-                                                    "song_id": rand.nextInt(9999),
+                                                    "song_uri": track.uri,
                                                     "title": track.name,
                                                     "artist": track.artist.name,
-                                                    // "album": track.album,            // not stored at the moment
-                                                    "genre" : "default genre",          // doesn't look like a value we can get, placeholder until we change the database
+                                                    "album": track.album,            // not stored at the moment
                                                     "seconds": track.duration ~/ 1000,  // Spotify SDK returns ms but we want to store seconds
                                                   },
                                                   "affect_data": {
-                                                    "value": currentRecording.affectDataArray
+                                                    "valance": valance,
+                                                    "arousal": arousal,
+                                                    "time_sampled": time_sampled,
                                                   }
                                                 }));
 
