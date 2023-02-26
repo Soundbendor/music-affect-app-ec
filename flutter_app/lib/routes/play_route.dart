@@ -187,7 +187,7 @@ class _PlayRouteState extends State<PlayRoute> {
                                                     "song_uri": track.uri,
                                                     "title": track.name,
                                                     "artist": track.artist.name,
-                                                    "album": track.album,            // not stored at the moment
+                                                    "album": track.album.name,            // not stored at the moment
                                                     "seconds": track.duration ~/ 1000,  // Spotify SDK returns ms but we want to store seconds
                                                   },
                                                   "affect_data": {
