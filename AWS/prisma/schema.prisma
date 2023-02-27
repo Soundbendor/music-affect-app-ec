@@ -1,29 +1,31 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:musicaffectpassword@music-affect-database.cllfmui94qyq.us-west-2.rds.amazonaws.com:5432/responseMetadata"
 }
 
 model responses {
   user_id       Int
-  song_id       Int
-  affect_data   Json?     @db.Json
+  song_uri      String    @db.VarChar(255)
+  valance       Float[]   @db.Real
+  arousal       Float[]   @db.Real
+  time_sampled  Float[]   @db.Real
   date_recorded DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
-  songs         songs     @relation(fields: [song_id], references: [song_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_song")
+  songs         songs     @relation(fields: [song_uri], references: [song_uri], onDelete: NoAction, onUpdate: NoAction)
   users         users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user")
 
-  @@id([user_id, song_id])
+  @@id([user_id, song_uri])
 }
 
 model songs {
-  song_id   Int         @id
+  song_uri  String      @id @db.VarChar(255)
   title     String?     @db.VarChar(255)
   artist    String?     @db.VarChar(255)
-  genre     String?     @db.VarChar(255)
+  album     String?     @db.VarChar(255)
   seconds   Int?
   responses responses[]
 }

@@ -26,7 +26,7 @@ exports.handler = async (event) => {
         const { user_data, song_data, affect_data } = body;
         console.log(song_data);
 
-        let res = await processResponse(affect_data, song_data, user_data)
+        let res = await processResponse(affect_data, user_data, song_data)
 
         console.log("Logged app data")
         console.log(res);
