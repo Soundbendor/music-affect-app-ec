@@ -74,79 +74,91 @@ class _TapperState extends State<Tapper> {
 
   @override
   Widget build(BuildContext context) {
-    return Listener(
-        onPointerDown: (PointerDownEvent event) {
-          // Global screen position.
-          print(
-              "Global position x:${event.position.dx}, y:${event.position.dy}");
-          // Position relative to where this widget starts.
-          print(
-              "Relative position: x:${event.localPosition.dx}, y:${event.localPosition.dy}");
+    return Column(children: [
+      const Text("High arousal"),
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        const RotatedBox(
+          quarterTurns: -1,
+          child: Text("Low valence"),
+        ),
+        Listener(
+            onPointerDown: (PointerDownEvent event) {
+              // Global screen position.
+              print(
+                  "Global position x:${event.position.dx}, y:${event.position.dy}");
+              // Position relative to where this widget starts.
+              print(
+                  "Relative position: x:${event.localPosition.dx}, y:${event.localPosition.dy}");
 
-          var x = ((event.localPosition.dx - 17) - 180) / 180;
-          var y = ((event.localPosition.dy - 180) * -1) / 180;
-          // here we update AffectCoordinates, that the interval alg will add to
-          // the CurrentRecording array, to eventually be sent to the server
-          addCoordinatesOnTap(x, y);
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Material(
-                  color: Colors.pink[100],
-                  child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(circleRadius)),
-                            color: Colors.transparent),
-                        width: gridSize,
-                        height: gridSize,
-                      ))),
-              Material(
-                  color: Colors.orange[100],
-                  child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(circleRadius)),
-                            color: Colors.transparent),
-                        width: gridSize,
-                        height: gridSize,
-                        // color: Colors.green,
-                      )))
-            ]),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Material(
-                  color: Colors.grey[300],
-                  child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(circleRadius)),
-                            color: Colors.transparent),
-                        width: gridSize,
-                        height: gridSize,
-                        // color: Colors.red,
-                      ))),
-              Material(
-                  color: Colors.blue[100],
-                  child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(circleRadius)),
-                              color: Colors.transparent),
-                          width: gridSize,
-                          height: gridSize)))
-            ])
-          ],
-        ));
+              var x = ((event.localPosition.dx - 17) - 180) / 180;
+              var y = ((event.localPosition.dy - 180) * -1) / 180;
+              // here we update AffectCoordinates, that the interval alg will add to
+              // the CurrentRecording array, to eventually be sent to the server
+              addCoordinatesOnTap(x, y);
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(children: [
+                  Material(
+                      color: Colors.pink[100],
+                      child: InkWell(
+                          onTap: () {},
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(circleRadius)),
+                                color: Colors.transparent),
+                            width: gridSize,
+                            height: gridSize,
+                          ))),
+                  Material(
+                      color: Colors.orange[100],
+                      child: InkWell(
+                          onTap: () {},
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(circleRadius)),
+                                color: Colors.transparent),
+                            width: gridSize,
+                            height: gridSize,
+                            // color: Colors.green,
+                          )))
+                ]),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Material(
+                      color: Colors.grey[300],
+                      child: InkWell(
+                          onTap: () {},
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(circleRadius)),
+                                color: Colors.transparent),
+                            width: gridSize,
+                            height: gridSize,
+                            // color: Colors.red,
+                          ))),
+                  Material(
+                      color: Colors.blue[100],
+                      child: InkWell(
+                          onTap: () {},
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      bottomRight:
+                                          Radius.circular(circleRadius)),
+                                  color: Colors.transparent),
+                              width: gridSize,
+                              height: gridSize)))
+                ])
+              ],
+            )),
+        const RotatedBox(quarterTurns: 1, child: Text("High valence"))
+      ]),
+      const Text("Low arousal")
+    ]);
   }
 }
