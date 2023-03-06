@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/tabs/home_tab.dart';
+import 'package:flutter_app/tabs/tutorial_tab.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:spotify_sdk/spotify_sdk.dart';
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
               ),
               body: const Padding(
                 padding: EdgeInsets.all(10),
-                child: TabBarView(children: [HomeTab(), Text('Tutorial')]),
+                child: TabBarView(children: [HomeTab(), TutorialTab()]),
               ))),
     );
   }
