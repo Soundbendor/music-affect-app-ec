@@ -7,6 +7,7 @@ import '../models/affect_coordinates.dart';
 class Tapper extends StatefulWidget {
   final void Function(List<double> data) addDataToArray;
   final bool shouldStartInterval;
+
   const Tapper(
       {Key? key,
       required this.addDataToArray,
@@ -93,41 +94,57 @@ class _TapperState extends State<Tapper> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(circleRadius)),
-                    color: Colors.pink[100]),
-                width: gridSize,
-                height: gridSize,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(circleRadius)),
-                    color: Colors.orange[100]),
-                width: gridSize,
-                height: gridSize,
-                // color: Colors.green,
-              )
+              Material(
+                  color: Colors.pink[100],
+                  child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(circleRadius)),
+                            color: Colors.transparent),
+                        width: gridSize,
+                        height: gridSize,
+                      ))),
+              Material(
+                  color: Colors.orange[100],
+                  child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(circleRadius)),
+                            color: Colors.transparent),
+                        width: gridSize,
+                        height: gridSize,
+                        // color: Colors.green,
+                      )))
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(circleRadius)),
-                    color: Colors.grey[300]),
-                width: gridSize,
-                height: gridSize,
-                // color: Colors.red,
-              ),
-              Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(circleRadius)),
-                      color: Colors.blue[100]),
-                  width: gridSize,
-                  height: gridSize)
+              Material(
+                  color: Colors.grey[300],
+                  child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(circleRadius)),
+                            color: Colors.transparent),
+                        width: gridSize,
+                        height: gridSize,
+                        // color: Colors.red,
+                      ))),
+              Material(
+                  color: Colors.blue[100],
+                  child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(circleRadius)),
+                              color: Colors.transparent),
+                          width: gridSize,
+                          height: gridSize)))
             ])
           ],
         ));
