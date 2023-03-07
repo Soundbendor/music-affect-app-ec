@@ -56,22 +56,3 @@ module.exports.readResponsesOfGenre = async(genre) => {
     await client.$disconnect();
     return retVal;
 }
-
-/*async function readResponsesOfGenre(genre){
-    let client = new PrismaClient();
-
-    let retVal = await client.songs.findMany({
-        where: {
-            genre: genre
-        },
-
-        include: {
-            responses: true
-        }
-    });
-
-    await client.$disconnect();
-    return retVal;
-}
-
-module.exports.misc = {readResponsesOfGenre};*/
