@@ -164,77 +164,77 @@ class _PlayRouteState extends State<PlayRoute> {
                               child: Row(
                                   children: currentRecording.isReadyToSubmit
                                       ? [
-                                          MaterialButton(
-                                              onPressed: () async {
-                                                var url = Uri.https('qzb9rm0k6c.execute-api.us-west-2.amazonaws.com', 'test/resource');
-                                                Random rand = Random();
+                                    MaterialButton(
+                                        onPressed: () async {
+                                          var url = Uri.https('qzb9rm0k6c.execute-api.us-west-2.amazonaws.com', 'test/resource');
+                                          Random rand = Random();
 
-                                                var valance = [];
-                                                var arousal = [];
-                                                var time_sampled = [];
-                                                for (var i = 0; i < currentRecording.affectDataArray.length; i++){
-                                                  time_sampled.add(currentRecording.affectDataArray[i][0]);
-                                                  valance.add(currentRecording.affectDataArray[i][1]);
-                                                  arousal.add(currentRecording.affectDataArray[i][2]);
-                                                }
+                                          var valence = [];
+                                          var arousal = [];
+                                          var time_sampled = [];
+                                          for (var i = 0; i < currentRecording.affectDataArray.length; i++){
+                                            time_sampled.add(currentRecording.affectDataArray[i][0]);
+                                            valence.add(currentRecording.affectDataArray[i][1]);
+                                            arousal.add(currentRecording.affectDataArray[i][2]);
+                                          }
 
-                                                await http.post(url, body: jsonEncode({
-                                                  "user_data": {
-                                                    "user_id": rand.nextInt(9999),
-                                                    "location": "nowhere"
-                                                  },
-                                                  "song_data": {
-                                                    "song_uri": track.uri,
-                                                    "title": track.name,
-                                                    "artist": track.artist.name,
-                                                    "album": track.album.name,            // not stored at the moment
-                                                    "seconds": track.duration ~/ 1000,  // Spotify SDK returns ms but we want to store seconds
-                                                  },
-                                                  "affect_data": {
-                                                    "valance": valance,
-                                                    "arousal": arousal,
-                                                    "time_sampled": time_sampled,
-                                                  }
-                                                }));
-
-                                                print(
-                                                    'Data recorded: ${currentRecording.affectDataArray}');
-                                                print(
-                                                    'Current Track: ${track.name}');
-                                                print('Fake user data');
-                                                // go back to home page
-                                                Navigator.pop(context);
-                                                // print(response);
-                                              },
-                                              child: const Text("Submit Data")),
-                                        ]
-                                      : [
-                                          IconButton(
-                                            iconSize: 72,
-                                            icon: const Icon(Icons.play_arrow),
-                                            color: Colors.green,
-                                            onPressed: playerState.isPaused
-                                                ? () async {
-                                                    await SpotifySdk.play(
-                                                        spotifyUri: track
-                                                                ?.uri ??
-                                                            'spotify:track:1bpnYrDCforv9ctJMzJRV8');
-
-                                                    setCurrentRecordingTrack(
-                                                        track);
-                                                  }
-                                                : null,
-                                          ),
-                                          IconButton(
-                                            iconSize: 72,
-                                            icon: const Icon(Icons.done),
-                                            color: Colors.red,
-                                            onPressed: () async {
-                                              setCurrentTrackEnded();
-                                              await SpotifySdk.pause();
+                                          await http.post(url, body: jsonEncode({
+                                            "user_data": {
+                                              "user_id": rand.nextInt(9999),
+                                              "location": "nowhere"
                                             },
-                                          ),
-                                        ])),
+                                            "song_data": {
+                                              "song_uri": track.uri,
+                                              "title": track.name,
+                                              "artist": track.artist.name,
+                                              "album": track.album.name,            // not stored at the moment
+                                              "seconds": track.duration ~/ 1000,  // Spotify SDK returns ms but we want to store seconds
+                                            },
+                                            "affect_data": {
+                                              "valence": valence,
+                                              "arousal": arousal,
+                                              "time_sampled": time_sampled,
+                                            }
+                                          }));
+
+                                          print(
+                                              'Data recorded: ${currentRecording.affectDataArray}');
+                                          print(
+                                              'Current Track: ${track.name}');
+                                          print('Fake user data');
+                                          // go back to home page
+                                          Navigator.pop(context);
+                                          // print(response);
+                                        },
+                                        child: const Text("Submit Data")),
+                                  ]
+                                      : [
+                                    IconButton(
+                                      iconSize: 72,
+                                      icon: const Icon(Icons.play_arrow),
+                                      color: Colors.green,
+                                      onPressed: playerState.isPaused
+                                          ? () async {
+                                        await SpotifySdk.play(
+                                            spotifyUri: track
+                                                ?.uri ??
+                                                'spotify:track:1bpnYrDCforv9ctJMzJRV8');
+
+                                        setCurrentRecordingTrack(
+                                            track);
+                                      }
+                                          : null,
+                                    ),
+                                    IconButton(
+                                      iconSize: 72,
+                                      icon: const Icon(Icons.done),
+                                      color: Colors.red,
+                                      onPressed: () async {
+                                        setCurrentTrackEnded();
+                                        await SpotifySdk.pause();
+                                      },
+                                    ),
+                                  ])),
                         ],
                       );
                     },
@@ -263,10 +263,10 @@ class _PlayRouteState extends State<PlayRoute> {
               // }, child: Text("send request")),
               Text(currentRecording.affectDataArray.isNotEmpty
                   ? currentRecording.affectDataArray
-                      .map((item) => item.map((x) => x.toStringAsFixed(2)))
-                      .toList()
-                      .last
-                      .toString()
+                  .map((item) => item.map((x) => x.toStringAsFixed(2)))
+                  .toList()
+                  .last
+                  .toString()
                   : ""),
               Tapper(
                   addDataToArray: addDataToArray,
