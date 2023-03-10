@@ -5,13 +5,14 @@ const { readAllResponses }  = require('./read_data');
 exports.handler = async (event) => {
     
     let statusCode = 200;
-    let response_body = ""
+    let response_body = "";
     console.log("request: " + (JSON.stringify(event)));
     
     // read data
     if(event.httpMethod == "GET") {
+
         console.log("GET");
-        let res = await readAllResponses()
+        let res = await readAllResponses();
         console.log("Retrieved data");
         console.log(res);
         response_body = res;
@@ -19,22 +20,30 @@ exports.handler = async (event) => {
     // submit app data
     } else if (event.httpMethod == "POST") {
         console.log("POST");
-        const body = JSON.parse(event.body)
+        const body = JSON.parse(event.body);
         console.log(body);
         
         // get all client user response data from request body
         const { user_data, song_data, affect_data } = body;
         console.log(song_data);
 
-        let res = await processResponse(affect_data, user_data, song_data)
+        try {
+            // see if database logs response properly
+            let res = await processResponse(affect_data, user_data, song_data)
 
-        console.log("Logged app data")
-        console.log(res);
+            console.log("Logged app data");
+            console.log(res);
+            response_body = "Successfully recorded affect response data";
+
+        } catch (err) {
+            // catch validation errors
+            statusCode = 400;
+            console.log(err)
+            response_body = "Validation error"
+        }
         
-        response_body = "Success (?)"
-
     } else {
-        console.log("No HTTP method specified")
+        console.log("No HTTP method specified");
     }
     
     // The output from a Lambda proxy integration must be 
@@ -48,6 +57,6 @@ exports.handler = async (event) => {
         headers: {},
         body: JSON.stringify(response_body)
     };
-    console.log("response: " + JSON.stringify(response))
+    console.log("response: " + JSON.stringify(response));
     return response;
 };

@@ -69,8 +69,10 @@ If there's already a response with this song+user combo, it updates that respons
 the new data and the current date.
 The affect_data argument must be an object, but currently doesn't need any particular format.*/
 module.exports.processResponse = async (affectData, user, song) =>{
-    if(validateData(affectData, user, song) !== true){
-        console.log("Uh oh, invalid data in processResponse. Updating database anyway");
+    try {
+        validateData(affectData, user, song);
+    } catch (err) {
+        throw err
     }
 
     let retVal;
