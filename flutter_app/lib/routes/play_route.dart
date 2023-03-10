@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -11,8 +12,7 @@ import 'package:spotify_sdk/spotify_sdk.dart';
 
 import '../models/current_recording.dart';
 import '../widgets/tapper.dart';
-
-import 'dart:math';
+import '../widgets/popup_dialog.dart';
 
 class PlayRoute extends StatefulWidget {
   const PlayRoute({super.key});
@@ -178,7 +178,7 @@ class _PlayRouteState extends State<PlayRoute> {
                                             arousal.add(currentRecording.affectDataArray[i][2]);
                                           }
 
-                                          await http.post(url, body: jsonEncode({
+                                          var serverResponse = await http.post(url, body: jsonEncode({
                                             "user_data": {
                                               "user_id": rand.nextInt(9999),
                                               "location": "nowhere"
@@ -187,7 +187,7 @@ class _PlayRouteState extends State<PlayRoute> {
                                               "song_uri": track.uri,
                                               "title": track.name,
                                               "artist": track.artist.name,
-                                              "album": track.album.name,            // not stored at the moment
+                                              "album": track.album.name,
                                               "seconds": track.duration ~/ 1000,  // Spotify SDK returns ms but we want to store seconds
                                             },
                                             "affect_data": {
@@ -202,9 +202,14 @@ class _PlayRouteState extends State<PlayRoute> {
                                           print(
                                               'Current Track: ${track.name}');
                                           print('Fake user data');
+                                          print('Server Response: $serverResponse');
                                           // go back to home page
                                           Navigator.pop(context);
-                                          // print(response);
+
+                                          Navigator.of(context).push(PopupDialog(
+                                            title: "Status Code:\n${serverResponse.statusCode}",
+                                            message: serverResponse.body,
+                                          ));
                                         },
                                         child: const Text("Submit Data")),
                                   ]
