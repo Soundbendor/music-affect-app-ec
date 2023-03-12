@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -114,183 +115,251 @@ class _PlayRouteState extends State<PlayRoute> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Here we get the connection status
-              StreamBuilder<ConnectionStatus>(
-                stream: SpotifySdk.subscribeConnectionStatus(),
-                builder: (thing, connectionSnapshot) {
-                  _connected = false;
-                  var data = connectionSnapshot.data;
-                  print(connectionSnapshot);
-                  if (data != null) {
-                    _connected = data.connected;
-                  }
-                  // and then we subscribe to player state
-                  return StreamBuilder<PlayerState>(
-                    stream: SpotifySdk.subscribePlayerState(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<PlayerState> snapshot) {
-                      var track = snapshot.data?.track;
-                      currentTrackImageUri = track?.imageUri;
-                      var playerState = snapshot.data;
-                      print(playerState);
-                      if (playerState == null || track == null) {
-                        return Center(
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                await dotenv.load(fileName: '.env');
-                                try {
-                                  var result =
-                                      await SpotifySdk.connectToSpotifyRemote(
-                                          clientId: dotenv.env['CLIENT_ID']
-                                              .toString(),
-                                          redirectUrl: dotenv
-                                              .env['REDIRECT_URL']
-                                              .toString(),
-                                          spotifyUri:
-                                              'spotify:track:1bpnYrDCforv9ctJMzJRV8');
-                                  print(result);
-                                } catch (e) {
-                                  print(e);
-                                }
-                              },
-                              child: Text("Connect to Spotify")),
-                        );
+              if (currentRecording.isReadyToSubmit)
+                ElevatedButton(
+                    onPressed: () async {
+                      var url = Uri.https(
+                          'qzb9rm0k6c.execute-api.us-west-2.amazonaws.com',
+                          'test/resource');
+                      Random rand = Random();
+
+                      var valence = [];
+                      var arousal = [];
+                      var time_sampled = [];
+                      for (var i = 0;
+                          i < currentRecording.affectDataArray.length;
+                          i++) {
+                        time_sampled
+                            .add(currentRecording.affectDataArray[i][0]);
+                        valence.add(currentRecording.affectDataArray[i][1]);
+                        arousal.add(currentRecording.affectDataArray[i][2]);
                       }
-                      // TODO: GET THIS PART WORKING
-                      // if (currentRecording.isRecording && track.uri != currentRecording.currentRecordingTrack?.uri) {
-                      //   setCurrentTrackEnded();
-                      //   print(track.uri);
-                      //   print(currentRecording.currentRecordingTrack?.uri);
-                      // }
 
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Column(
-                            children: [
-                              Row(
-                                children: const [Text('Time Left:')],
-                              ),
-                              LinearProgressIndicator(
-                                value: playerState.playbackPosition /
-                                    track.duration!,
-                                semanticsLabel: 'Linear progress indicator',
-                              )
-                            ],
-                          ),
-                          Text(
-                              '${track.name} by ${track.artist.name} from the album ${track.album.name}'),
-                          Center(
-                              child: Row(
-                                  children: currentRecording.isReadyToSubmit
-                                      ? [
-                                          ElevatedButton(
-                                              onPressed: () async {
-                                                var url = Uri.https(
-                                                    'qzb9rm0k6c.execute-api.us-west-2.amazonaws.com',
-                                                    'test/resource');
-                                                Random rand = Random();
+                      var serverResponse = await http.post(url,
+                          body: jsonEncode({
+                            "user_data": {
+                              "user_id": rand.nextInt(9999),
+                              "location": "nowhere"
+                            },
+                            "song_data": {
+                              "song_uri": currentRecording.currentRecordingTrack?.uri,
+                              "title": currentRecording.currentRecordingTrack?.name,
+                              "artist": currentRecording.currentRecordingTrack?.artist.name,
+                              "album": currentRecording.currentRecordingTrack?.album.name,
+                              "seconds": currentRecording.currentRecordingTrack?.duration ?? 0 ~/
+                                  1000, // Spotify SDK returns ms but we want to store seconds
+                            },
+                            "affect_data": {
+                              "valence": valence,
+                              "arousal": arousal,
+                              "time_sampled": time_sampled,
+                            }
+                          }));
 
-                                                var valence = [];
-                                                var arousal = [];
-                                                var time_sampled = [];
-                                                for (var i = 0;
-                                                    i <
-                                                        currentRecording
-                                                            .affectDataArray
-                                                            .length;
-                                                    i++) {
-                                                  time_sampled.add(
-                                                      currentRecording
-                                                              .affectDataArray[
-                                                          i][0]);
-                                                  valence.add(currentRecording
-                                                      .affectDataArray[i][1]);
-                                                  arousal.add(currentRecording
-                                                      .affectDataArray[i][2]);
-                                                }
+                      print(
+                          'Data recorded: ${currentRecording.affectDataArray}');
+                      print('Current Track: ${currentRecording.currentRecordingTrack?.name}');
+                      print('Fake user data');
+                      print('Server Response: $serverResponse');
+                      // go back to home page
+                      Navigator.pop(context);
 
-                                                var serverResponse =
-                                                    await http.post(url,
-                                                        body: jsonEncode({
-                                                          "user_data": {
-                                                            "user_id": rand
-                                                                .nextInt(9999),
-                                                            "location":
-                                                                "nowhere"
-                                                          },
-                                                          "song_data": {
-                                                            "song_uri":
-                                                                track.uri,
-                                                            "title": track.name,
-                                                            "artist": track
-                                                                .artist.name,
-                                                            "album": track
-                                                                .album.name,
-                                                            "seconds": track
-                                                                    .duration ~/
-                                                                1000, // Spotify SDK returns ms but we want to store seconds
-                                                          },
-                                                          "affect_data": {
-                                                            "valence": valence,
-                                                            "arousal": arousal,
-                                                            "time_sampled":
-                                                                time_sampled,
-                                                          }
-                                                        }));
-
-                                                print(
-                                                    'Data recorded: ${currentRecording.affectDataArray}');
-                                                print(
-                                                    'Current Track: ${track.name}');
-                                                print('Fake user data');
-                                                print(
-                                                    'Server Response: $serverResponse');
-                                                // go back to home page
-                                                Navigator.pop(context);
-
-                                                Navigator.of(context)
-                                                    .push(PopupDialog(
-                                                  title:
-                                                      "Status Code:\n${serverResponse.statusCode}",
-                                                  message: serverResponse.body,
-                                                ));
-                                              },
-                                              child: const Text("Submit Data")),
-                                        ]
-                                      : [
-                                          IconButton(
-                                            iconSize: 72,
-                                            icon: const Icon(Icons.play_arrow),
-                                            color: Colors.green,
-                                            onPressed: playerState.isPaused
-                                                ? () async {
-                                                    await SpotifySdk.play(
-                                                        spotifyUri: track
-                                                                ?.uri ??
-                                                            'spotify:track:1bpnYrDCforv9ctJMzJRV8');
-
-                                                    setCurrentRecordingTrack(
-                                                        track);
-                                                  }
-                                                : null,
-                                          ),
-                                          IconButton(
-                                            iconSize: 72,
-                                            icon: const Icon(Icons.done),
-                                            color: Colors.red,
-                                            onPressed: () async {
-                                              setCurrentTrackEnded();
-                                              await SpotifySdk.pause();
-                                            },
-                                          ),
-                                        ])),
-                        ],
-                      );
+                      Navigator.of(context).push(PopupDialog(
+                        title: "Status Code:\n${serverResponse.statusCode}",
+                        message: serverResponse.body,
+                      ));
                     },
-                  );
-                },
-              ),
+                    child: const Text("Submit Data"))
+              else
+                StreamBuilder<ConnectionStatus>(
+                  stream: SpotifySdk.subscribeConnectionStatus(),
+                  builder: (thing, connectionSnapshot) {
+                    _connected = false;
+                    var data = connectionSnapshot.data;
+                    print(connectionSnapshot);
+                    if (data != null) {
+                      _connected = data.connected;
+                    }
+                    // and then we subscribe to player state
+                    return StreamBuilder<PlayerState>(
+                      stream: SpotifySdk.subscribePlayerState(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<PlayerState> snapshot) {
+                        var track = snapshot.data?.track;
+                        var playerState = snapshot.data;
+                        print(playerState);
+                        if (playerState == null || track == null) {
+                          return Center(
+                            child: ElevatedButton(
+                                onPressed: () async {
+                                  await dotenv.load(fileName: '.env');
+                                  try {
+                                    var result =
+                                        await SpotifySdk.connectToSpotifyRemote(
+                                            clientId: dotenv.env['CLIENT_ID']
+                                                .toString(),
+                                            redirectUrl: dotenv
+                                                .env['REDIRECT_URL']
+                                                .toString(),
+                                            spotifyUri:
+                                                'spotify:track:1bpnYrDCforv9ctJMzJRV8');
+                                    print(result);
+                                  } catch (e) {
+                                    print(e);
+                                  }
+                                },
+                                child: Text("Connect to Spotify")),
+                          );
+                        }
+
+                        if (Platform.isIOS &&
+                            currentRecording.currentRecordingTrack == null) {
+                          currentRecording.currentRecordingTrack = track;
+                        }
+
+                        if (!currentRecording.isReadyToSubmit && currentRecording.isRecording &&
+                            track.uri !=
+                                currentRecording.currentRecordingTrack?.uri) {
+                          currentRecording.currentTrackEnded();
+                          SpotifySdk.pause();
+                        }
+
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Column(
+                              children: [
+                                Row(
+                                  children: const [Text('Time Left:')],
+                                ),
+                                LinearProgressIndicator(
+                                  value: playerState.playbackPosition /
+                                      track.duration!,
+                                  semanticsLabel: 'Linear progress indicator',
+                                )
+                              ],
+                            ),
+                            Text(
+                                '${track.name} by ${track.artist.name} from the album ${track.album.name}'),
+                            Center(
+                                child: Row(
+                                    children: currentRecording.isReadyToSubmit
+                                        ? [
+                                            ElevatedButton(
+                                                onPressed: () async {
+                                                  var url = Uri.https(
+                                                      'qzb9rm0k6c.execute-api.us-west-2.amazonaws.com',
+                                                      'test/resource');
+                                                  Random rand = Random();
+
+                                                  var valence = [];
+                                                  var arousal = [];
+                                                  var time_sampled = [];
+                                                  for (var i = 0;
+                                                      i <
+                                                          currentRecording
+                                                              .affectDataArray
+                                                              .length;
+                                                      i++) {
+                                                    time_sampled.add(
+                                                        currentRecording
+                                                                .affectDataArray[
+                                                            i][0]);
+                                                    valence.add(currentRecording
+                                                        .affectDataArray[i][1]);
+                                                    arousal.add(currentRecording
+                                                        .affectDataArray[i][2]);
+                                                  }
+
+                                                  var serverResponse =
+                                                      await http.post(url,
+                                                          body: jsonEncode({
+                                                            "user_data": {
+                                                              "user_id":
+                                                                  rand.nextInt(
+                                                                      9999),
+                                                              "location":
+                                                                  "nowhere"
+                                                            },
+                                                            "song_data": {
+                                                              "song_uri":
+                                                                  track.uri,
+                                                              "title":
+                                                                  track.name,
+                                                              "artist": track
+                                                                  .artist.name,
+                                                              "album": track
+                                                                  .album.name,
+                                                              "seconds": track
+                                                                      .duration ~/
+                                                                  1000, // Spotify SDK returns ms but we want to store seconds
+                                                            },
+                                                            "affect_data": {
+                                                              "valence":
+                                                                  valence,
+                                                              "arousal":
+                                                                  arousal,
+                                                              "time_sampled":
+                                                                  time_sampled,
+                                                            }
+                                                          }));
+
+                                                  print(
+                                                      'Data recorded: ${currentRecording.affectDataArray}');
+                                                  print(
+                                                      'Current Track: ${track.name}');
+                                                  print('Fake user data');
+                                                  print(
+                                                      'Server Response: $serverResponse');
+                                                  // go back to home page
+                                                  Navigator.pop(context);
+
+                                                  Navigator.of(context)
+                                                      .push(PopupDialog(
+                                                    title:
+                                                        "Status Code:\n${serverResponse.statusCode}",
+                                                    message:
+                                                        serverResponse.body,
+                                                  ));
+                                                },
+                                                child:
+                                                    const Text("Submit Data")),
+                                          ]
+                                        : [
+                                            IconButton(
+                                              iconSize: 72,
+                                              icon:
+                                                  const Icon(Icons.play_arrow),
+                                              color: Colors.green,
+                                              onPressed: playerState.isPaused
+                                                  ? () async {
+                                                      await SpotifySdk.play(
+                                                          spotifyUri: track
+                                                                  ?.uri ??
+                                                              'spotify:track:1bpnYrDCforv9ctJMzJRV8');
+
+                                                      setCurrentRecordingTrack(
+                                                          track);
+                                                    }
+                                                  : null,
+                                            ),
+                                            IconButton(
+                                              iconSize: 72,
+                                              icon: const Icon(Icons.done),
+                                              color: Colors.red,
+                                              onPressed: () async {
+                                                setCurrentTrackEnded();
+                                                await SpotifySdk.pause();
+                                              },
+                                            ),
+                                          ])),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
               Text(currentRecording.affectDataArray.isNotEmpty
                   ? currentRecording.affectDataArray
                       .map((item) => item.map((x) => x.toStringAsFixed(2)))
