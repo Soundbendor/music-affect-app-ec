@@ -12,19 +12,12 @@ Future<http.Response> fetchData() {
 }
 
 void main() async {
-  var data = await fetchData();
   if (kDebugMode) {
+    var data = await fetchData();
     print(data.body);
   }
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
-  try {
-    var result = await SpotifySdk.connectToSpotifyRemote(
-        clientId: dotenv.env['CLIENT_ID'].toString(),
-        redirectUrl: dotenv.env['REDIRECT_URL'].toString());
-    print(result);
-  } catch (e) {
-    print(e);
-  }
 
   runApp(const MyApp());
 }
