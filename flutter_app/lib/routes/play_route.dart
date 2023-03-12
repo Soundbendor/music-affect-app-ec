@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -118,6 +119,7 @@ class _PlayRouteState extends State<PlayRoute> {
                 builder: (thing, connectionSnapshot) {
                   _connected = false;
                   var data = connectionSnapshot.data;
+                  print(connectionSnapshot);
                   if (data != null) {
                     _connected = data.connected;
                   }
@@ -129,10 +131,35 @@ class _PlayRouteState extends State<PlayRoute> {
                       var track = snapshot.data?.track;
                       currentTrackImageUri = track?.imageUri;
                       var playerState = snapshot.data;
-
+                      print(playerState);
                       if (playerState == null || track == null) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
+                        return Center(
+                          child: ElevatedButton(onPressed: () async {
+
+                            await dotenv.load(fileName: '.env');
+                            print('why does this not work ${dotenv.env['REDIRECT_URL'].toString()}');
+                              try {
+                                var accessToken = await SpotifySdk.getAccessToken(
+                                    clientId: dotenv.env['CLIENT_ID'].toString(),
+                                    redirectUrl: dotenv.env['REDIRECT_URL'].toString(),
+                                    scope: "app-remote-control,user-modify-playback-state,playlist-read-private",
+                                    spotifyUri: 'spotify:track:1bpnYrDCforv9ctJMzJRV8'
+                                );
+                                print('okokokokokokok');
+                                print(accessToken);
+                              } catch(error) {
+                                print(error);
+                              }
+
+                              try {
+                                // var result = await SpotifySdk.connectToSpotifyRemote(
+                                //     clientId: dotenv.env['CLIENT_ID'].toString(),
+                                //     redirectUrl: dotenv.env['REDIRECT_URL'].toString());
+                                // print(result);
+                              } catch (e) {
+                                print(e);
+                              }
+                          }, child: Text("Connect to Spotify")),
                         );
                       }
                       // TODO: GET THIS PART WORKING
@@ -230,26 +257,6 @@ class _PlayRouteState extends State<PlayRoute> {
                   );
                 },
               ),
-              // TODO: delete this
-              // MaterialButton(onPressed: () async {
-              //   var url = Uri.https('97f186enh3.execute-api.us-west-2.amazonaws.com', 'test/helloworld');
-              //   var response = await http.post(url, body: jsonEncode({
-              //     "user_data": {
-              //       "user_id": 256,
-              //       "location": "nowhere"
-              //     },
-              //     "song_data": {
-              //       "song_id": 2,
-              //       "title": "Example Song",
-              //       "artist": "Example Artist",
-              //       "genre": "Example Genre",
-              //       "seconds": 256
-              //     },
-              //     "response_data": affectDataArray
-              //   }));
-              //   print('Response status: ${response.statusCode}');
-              //   print('Response body: ${response.body}');
-              // }, child: Text("send request")),
               Text(currentRecording.affectDataArray.isNotEmpty
                   ? currentRecording.affectDataArray
                       .map((item) => item.map((x) => x.toStringAsFixed(2)))
