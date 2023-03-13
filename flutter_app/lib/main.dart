@@ -19,6 +19,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
 
+  await SpotifySdk.connectToSpotifyRemote(
+      clientId: dotenv.env['CLIENT_ID'].toString(),
+      redirectUrl: dotenv.env['REDIRECT_URL'].toString());
+
+  // for iOS and in case they are playing music already
+  await SpotifySdk.pause();
   runApp(const MyApp());
 }
 

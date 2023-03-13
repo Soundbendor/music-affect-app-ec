@@ -14,7 +14,9 @@ class CurrentRecording {
 
   /// adds [data] to the array to be stored and sent to server
   void addDataToArray(List<double> data) {
-    _affectDataArray.add(data);
+    if (!isReadyToSubmit) {
+      _affectDataArray.add(data);
+    }
   }
 
   /// reset the data in the array
