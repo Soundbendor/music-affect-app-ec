@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools ="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+
+    tools:context=".MainActivity"
+    tools:ignore="MissingClass">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Profile"
+        android:textSize="100px"
+        android:textColor="#d3d8e3"
+        android:layout_alignParentTop = "true"
+        android:layout_centerHorizontal = "true"
+        android:layout_marginTop="450px" />
+
+    <EditText
+        android:id="@+id/user1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginRight="40dp"
+        android:drawablePadding="5dp"
+        android:gravity="start"
+
+        android:hint="username"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:textColorHint="#8e9094"
+        android:textCursorDrawable="@null" />
+
+    <EditText
+        android:id="@+id/email1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+
+        android:layout_marginTop="320dp"
+        android:layout_marginRight="40dp"
+        android:drawablePadding="5dp"
+        android:gravity="start"
+        android:hint="email"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:textColorHint="#8e9094"
+        android:textCursorDrawable="@null" />
+
+
+    <EditText
+        android:id="@+id/fname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="390dp"
+
+        android:layout_marginRight="40dp"
+        android:drawablePadding="5dp"
+        android:gravity="start"
+        android:hint="First name"
+        android:inputType="text"
+        android:textColorHint="#8e9094"
+        android:textCursorDrawable="@null"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <EditText
+        android:id="@+id/lname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="460dp"
+
+        android:layout_marginRight="40dp"
+        android:drawablePadding="5dp"
+        android:gravity="start"
+        android:hint="Last name"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:textColorHint="#8e9094"
+        android:textCursorDrawable="@null" />
+
+    <CheckBox
+        android:layout_marginLeft="125dp"
+        android:layout_marginTop="485dp"
+        android:id="@+id/remember_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remember Me"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CREATE"
+        android:id="@+id/btnStartAnotherActivity"
+        android:textAllCaps="false"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="550dp"
+        android:textColor="#d3d8e3"
+        android:textSize="20dp"
+        android:onClick="create"
+        android:background="@drawable/round_button"
+        android:gravity="center"/>
+
+
+
+</RelativeLayout>
