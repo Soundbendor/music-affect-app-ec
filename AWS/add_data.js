@@ -5,47 +5,118 @@ const { PrismaClient } = require('@prisma/client')
 affect_data = {valence(float array), arousal(float array), time_sampled(float array)}
 user = {user_id(int), location(string)}
 song = {song_uri(string), title(string), artist(string), album(string), seconds(int)}
-What it does is add the song and user to the database (if they aren't already in there) and 
+The function adds the song and user to the database (if they aren't already in there) and 
 adds the response. If there's already a response with that song and user, it updates the old 
 response with the new data. You may notice the date_recorded field in the Response table. 
 Don't worry about that, it's set to the current date automatically upon adding a response, 
 and the updateResponse function also sets it to the current date.*/
 
-/*Checks the data and throws an error if there's a problem. Minimally used now, might be
-expanded in the future.*/
+//Checks the affect data, user, and song, and throws an error if they don't have the expected properties.
 function validateData(affectData, user, song){
-    if(affectData.valence.length !== affectData.arousal.length ||
-        affectData.arousal.length !== affectData.time_sampled.length)
-        {
-            console.log("Error: affect data array lengths don't match.")
-            console.log(affectData.valence);
-            console.log(affectData.arousal);
-            console.log(affectData.time_sampled);
+    if(!('valence' in affectData && 'arousal' in affectData && 'time_sampled' in affectData)){
+        console.log("Error: Missing properties in affectData.");
+        console.log(affectData);
+        throw "Missing properties in affectData.";
+    }
 
-            throw "Affect data array lengths don't match.";
-        }
+    validateUser(user);
+
+    if(!('song_uri' in song && 'title' in song && 'artist' in song &&
+    'album' in song && 'seconds' in song)){
+        console.log("Error: Missing properties in song");
+        console.log(song);
+        throw "Missing properties in song.";
+    }
+
+    if(affectData.valence.length !== affectData.arousal.length ||
+    affectData.arousal.length !== affectData.time_sampled.length){
+        console.log("Error: Affect data array lengths don't match.")
+        console.log(affectData);
+
+        throw "Affect data array lengths don't match.";
+    }
     
     return true;
 }
 
-//Checks if a user exists. If it doesn't, it adds it. If it does, returns null.
-async function addUser(data, client){
-    let exists = await client.users.findUnique({
-        where: {
-            user_id: data.user_id
-        }
-    })
-    if(exists === null){
-        retVal = await client.users.create({
-            data: data
-        });
+//Throws an error if the user doesn't have the expected properties
+function validateUser(user){
+    if(!('user_id' in user)){
+        console.log("Error: Missing user_id in user");
+        console.log(user);
+        throw "Missing user_id in user.";
     }
-    else{ retVal = null; }
-    
-    return retVal;
+
+    if(!('location' in user)){
+        console.log("Error: Missing location in user");
+        console.log(user);
+        throw "Missing location in user.";
+    }
+
+    return true;
 }
 
-//Exactly the same as addUser. If there's a good way to combine these into one function, let me know
+//If a user with a matching id exists, returns it. Otherwise returns false
+async function findUser(id, client){
+    let exists = await client.users.findUnique({
+        where: {
+            user_id: id
+        }
+    })
+
+    if(exists === null){
+        return false;
+    }
+
+    return exists;
+}
+
+//Takes a user object and adds it to the database. If it already exists, returns a message. Otherwise returns 0
+module.exports.createUser = async (user) =>{
+    try {
+        validateUser(user);
+    } catch (err) {
+        throw err
+    }
+
+    let client = new PrismaClient;
+    if(findUser(user.user_id, client)){
+        return "User with this id already exists.";
+    }
+
+    let retVal = await client.users.create({
+        data: client
+    });
+
+    return 0
+}
+
+//Updates a user. If no matching user exists, returns a message. Otherwise returns 0
+module.exports.updateUser = async (user) =>{
+    try {
+        validateUser(user);
+    } catch (err) {
+        throw err
+    }
+
+    let client = new PrismaClient;
+    if(!findUser(user.user_id, client)){
+        return "Error: No user with this id.";
+    }
+
+    retVal = await client.users.update({
+        data: {
+            location: user.location
+        },
+        where: {
+            user_id: user.user_id
+        }
+    })
+
+    return 0;
+}
+
+//Adds a song to the database. If it already exists, returns a message. Otherwise, returns 0
 async function addSong(data, client){
     let exists = await client.songs.findUnique({
         where: {
@@ -57,17 +128,16 @@ async function addSong(data, client){
             data: data
         });
     }
-    else{ retVal = null; }
+    else{ "Song already exists."; }
     
-    return retVal;
+    return 0;
 }
 
 /*Takes response data, a user object, a and song object, and adds data as follows:
 If the user and/or song are not yet in the database, it adds them.
 If there's no response with this song+user combination, it inserts the response.
 If there's already a response with this song+user combo, it updates that response with
-the new data and the current date.
-The affect_data argument must be an object, but currently doesn't need any particular format.*/
+the new data and the current date.*/
 module.exports.processResponse = async (affectData, user, song) =>{
     try {
         validateData(affectData, user, song);
@@ -89,7 +159,7 @@ module.exports.processResponse = async (affectData, user, song) =>{
     if(exists == null){//If the response doesn't exist yet, insert it
 
         //Add the song and user if they don't exist
-        await addUser(user, client);
+        await createUser(user, client);
         await addSong(song, client);
 
         retVal = await client.responses.create({
