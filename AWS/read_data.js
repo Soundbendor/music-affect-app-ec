@@ -43,7 +43,7 @@ module.exports.filterSearch = async(searchOptions) => {
     let client = new PrismaClient();
 
     //The showArrays property can be set to false when testing for easier viewing
-    if(searchOptions.showArrays === null){
+    if(searchOptions.showArrays !== false){
         searchOptions.showArrays = true;
     }
 
@@ -89,7 +89,7 @@ module.exports.filterSearch = async(searchOptions) => {
         orderBy: {},
     };
 
-    if(searchOptions.orderBy == null){
+    if(searchOptions.orderBy == undefined){
         searchOptions.orderBy = "date_recorded";
     }
     if(searchOptions.sortDirection !== "asc" && searchOptions.sortDirection !== "desc"){
@@ -112,7 +112,7 @@ module.exports.filterSearch = async(searchOptions) => {
             break;
 
         default:
-            orderBy[searchOptions.orderBy] = searchOptions.sortDirection;
+            query.orderBy[searchOptions.orderBy] = searchOptions.sortDirection;
     }
 
     let retVal = await client.responses.findMany(query);
@@ -121,18 +121,62 @@ module.exports.filterSearch = async(searchOptions) => {
     return retVal;
 }
 
-//Returns all responses of the given artist
-module.exports.readResponsesOfArtist = async(artist) => {
-    let client = new PrismaClient();
+//Checks the affect data, user, and song, and throws an error if they don't have the expected properties.
+module.exports.validateData = (affectData, user, song) => {
+    if(!('valence' in affectData && 'arousal' in affectData && 'time_sampled' in affectData)){
+        console.log("Error: Missing properties in affectData.");
+        console.log(affectData);
+        throw "Missing properties in affectData.";
+    }
 
-    let retVal = await client.responses.findMany({
+    module.exports.validateUser(user);
+
+    if(!('song_uri' in song && 'title' in song && 'artist' in song &&
+    'album' in song && 'seconds' in song)){
+        console.log("Error: Missing properties in song");
+        console.log(song);
+        throw "Missing properties in song.";
+    }
+
+    if(affectData.valence.length !== affectData.arousal.length ||
+    affectData.arousal.length !== affectData.time_sampled.length){
+        console.log("Error: Affect data array lengths don't match.")
+        console.log(affectData);
+
+        throw "Affect data array lengths don't match.";
+    }
+    
+    return true;
+}
+
+//Throws an error if the user doesn't have the expected properties
+module.exports.validateUser = (user) => {
+    if(!('user_id' in user)){
+        console.log("Error: Missing user_id in user");
+        console.log(user);
+        throw "Missing user_id in user.";
+    }
+
+    if(!('location' in user)){
+        console.log("Error: Missing location in user");
+        console.log(user);
+        throw "Missing location in user.";
+    }
+
+    return true;
+}
+
+//If a user with a matching id exists, returns it. Otherwise returns false
+module.exports.findUser = async (id, client) => {
+    let exists = await client.users.findUnique({
         where: {
-            songs: {
-                artist: artist
-            }
+            user_id: id
         }
-    });
+    })
 
-    await client.$disconnect();
-    return retVal;
+    if(exists === null){
+        return false;
+    }
+
+    return exists;
 }
