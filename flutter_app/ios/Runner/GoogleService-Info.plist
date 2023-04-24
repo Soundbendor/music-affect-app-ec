@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>562917262792-2vgmaq8v9fn58d2umnlc0b0jcq01mvbc.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.562917262792-2vgmaq8v9fn58d2umnlc0b0jcq01mvbc</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAoSm0jDvx19FcBrk44PnIaJvR5L23a-SY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>562917262792</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.soundbendor.flutterApp</string>
+	<key>PROJECT_ID</key>
+	<string>music-affect-data-osu-ecampus</string>
+	<key>STORAGE_BUCKET</key>
+	<string>music-affect-data-osu-ecampus.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:562917262792:ios:610b5abf7cad852996acfd</string>
+</dict>
+</plist>

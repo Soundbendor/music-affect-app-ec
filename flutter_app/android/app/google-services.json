@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "562917262792",
+    "project_id": "music-affect-data-osu-ecampus",
+    "storage_bucket": "music-affect-data-osu-ecampus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562917262792:android:7403316d7bdf85b396acfd",
+        "android_client_info": {
+          "package_name": "org.soundbendor.flutter_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "562917262792-l9rignuonejt5nqnil1iuonu6fic0kb0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCH3fVsxkvSxNQ7PfuPPp_m8a93oZt8UmA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "562917262792-l9rignuonejt5nqnil1iuonu6fic0kb0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "562917262792-2vgmaq8v9fn58d2umnlc0b0jcq01mvbc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.soundbendor.flutterApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

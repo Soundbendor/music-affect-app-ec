@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/tabs/home_tab.dart';
-import 'package:flutter_app/tabs/tutorial_tab.dart';
+import 'package:flutter_app/routes/auth_gate.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:spotify_sdk/spotify_sdk.dart';
+
+import 'firebase_options.dart';
 
 Future<http.Response> fetchData() {
   return http.get(Uri.parse(
@@ -19,12 +22,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
 
-  await SpotifySdk.connectToSpotifyRemote(
-      clientId: dotenv.env['CLIENT_ID'].toString(),
-      redirectUrl: dotenv.env['REDIRECT_URL'].toString());
+  // await SpotifySdk.connectToSpotifyRemote(
+  //     clientId: dotenv.env['CLIENT_ID'].toString(),
+  //     redirectUrl: dotenv.env['REDIRECT_URL'].toString());
+  //
+  // // for iOS and in case they are playing music already
+  // await SpotifySdk.pause();
 
-  // for iOS and in case they are playing music already
-  await SpotifySdk.pause();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -48,20 +55,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-              appBar: AppBar(
-                title: const Text('Music Affect Data'),
-                bottom: const TabBar(tabs: [
-                  Tab(icon: Icon(Icons.home)),
-                  Tab(icon: Icon(Icons.question_mark)),
-                ]),
-              ),
-              body: const Padding(
-                padding: EdgeInsets.all(10),
-                child: TabBarView(children: [HomeTab(), TutorialTab()]),
-              ))),
+      home: const AuthGate(),
     );
   }
 }

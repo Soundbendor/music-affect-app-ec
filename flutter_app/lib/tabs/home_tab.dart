@@ -14,7 +14,7 @@ class HomeTab extends StatelessWidget {
         children: [
           Center(
             child: Text(
-              "Soundbendor\nMusic Affect\nData Collection",
+              "Music Affect\nData Collection",
               textAlign: TextAlign.center,
               style:
                   DefaultTextStyle.of(context).style.apply(fontSizeFactor: 2.0),
@@ -23,7 +23,7 @@ class HomeTab extends StatelessWidget {
           Center(
               child: IconButton(
             iconSize: 72,
-            icon: Icon(Icons.music_note),
+            icon: const Icon(Icons.music_note),
             color: Colors.green,
             onPressed: () {
               Navigator.push(
