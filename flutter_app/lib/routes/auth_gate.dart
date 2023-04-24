@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/routes/profile_route.dart';
 import 'package:flutter_app/routes/sign_in_route.dart';
-import 'package:flutterfire_ui/auth.dart';
 
 import '../tabs/home_tab.dart';
 import '../tabs/tutorial_tab.dart';
