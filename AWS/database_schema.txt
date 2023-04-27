@@ -1,0 +1,36 @@
+model responses {
+  user_id             Int
+  song_uri            String    @db.VarChar(255)
+  valence             Float[]   @db.Real
+  arousal             Float[]   @db.Real
+  time_sampled        Float[]   @db.Real
+  date_recorded       DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
+  heard_song_before   Boolean?
+  heard_artist_before Boolean?
+  ad_played           Boolean?  @default(false)
+  songs               songs     @relation(fields: [song_uri], references: [song_uri], onDelete: NoAction, onUpdate: NoAction)
+  users               users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user")
+
+  @@id([user_id, song_uri])
+}
+
+model songs {
+  song_uri  String      @id @db.VarChar(255)
+  title     String?     @db.VarChar(255)
+  artist    String?     @db.VarChar(255)
+  album     String?     @db.VarChar(255)
+  seconds   Int?
+  responses responses[]
+}
+
+model users {
+  user_id          Int         @id
+  age              Int?
+  gender           String?     @db.VarChar(255)
+  location         String?     @db.VarChar(255)
+  primary_language String?     @db.VarChar(255)
+  listening_habits String?     @db.VarChar(255)
+  music_experience String?     @db.VarChar(255)
+  hearing_loss     Boolean?    @default(false)
+  responses        responses[]
+}
