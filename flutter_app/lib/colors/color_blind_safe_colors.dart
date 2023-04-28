@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ColorBlindSafeColors {
-  static const Color beaverOrange = Color(0xFFD73F09);
   static const Color blue = Color(0xFF0077BB);
   static const Color cyan = Color(0xFF33BBEE);
   static const Color teal = Color(0xFF009988);
