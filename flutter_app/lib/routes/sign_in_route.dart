@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/colors/osu_colors.dart';
 import 'package:flutter_app/widgets/forget_password_form.dart';
 import 'package:flutter_app/widgets/sign_in_form.dart';
 import 'package:flutter_app/widgets/sign_up_form.dart';
@@ -29,7 +30,7 @@ class _SignInRouteState extends State<SignInRoute> {
             onPressed: () => setIsLogin(),
             child: Text(
               isLogin ? "Create Account" : "Sign In",
-              style: const TextStyle(color: Colors.blue),
+              style: const TextStyle(color: OSUSecondaryColors.highTide),
             ),
           ),
           isLogin ? MaterialButton(
@@ -41,7 +42,7 @@ class _SignInRouteState extends State<SignInRoute> {
             },
             child: const Text(
               "Forgot Password?",
-              style: TextStyle(color: Colors.blue),
+              style: TextStyle(color: OSUSecondaryColors.highTide),
             ),
           ) : const Text("")
         ]));

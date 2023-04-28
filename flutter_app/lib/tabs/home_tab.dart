@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/colors/osu_colors.dart';
 import 'package:flutter_app/routes/play_route.dart';
 
 class HomeTab extends StatelessWidget {
@@ -24,7 +25,7 @@ class HomeTab extends StatelessWidget {
               child: IconButton(
             iconSize: 72,
             icon: const Icon(Icons.music_note),
-            color: Colors.green,
+            color: OSUSecondaryColors.pineStand,
             onPressed: () {
               Navigator.push(
                 context,

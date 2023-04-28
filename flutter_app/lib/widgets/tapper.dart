@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/colors/color_blind_safe_colors.dart';
 
 import '../models/affect_coordinates.dart';
 
@@ -102,7 +103,7 @@ class _TapperState extends State<Tapper> {
               children: [
                 Row(children: [
                   Material(
-                      color: Colors.pink[100],
+                      color: ColorBlindSafeColors.magenta,
                       child: InkWell(
                           onTap: () {},
                           child: Container(
@@ -114,7 +115,7 @@ class _TapperState extends State<Tapper> {
                             height: gridSize,
                           ))),
                   Material(
-                      color: Colors.orange[100],
+                      color: ColorBlindSafeColors.orange,
                       child: InkWell(
                           onTap: () {},
                           child: Container(
@@ -124,12 +125,11 @@ class _TapperState extends State<Tapper> {
                                 color: Colors.transparent),
                             width: gridSize,
                             height: gridSize,
-                            // color: Colors.green,
                           )))
                 ]),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Material(
-                      color: Colors.grey[300],
+                      color: ColorBlindSafeColors.grey,
                       child: InkWell(
                           onTap: () {},
                           child: Container(
@@ -139,10 +139,9 @@ class _TapperState extends State<Tapper> {
                                 color: Colors.transparent),
                             width: gridSize,
                             height: gridSize,
-                            // color: Colors.red,
                           ))),
                   Material(
-                      color: Colors.blue[100],
+                      color: ColorBlindSafeColors.cyan,
                       child: InkWell(
                           onTap: () {},
                           child: Container(

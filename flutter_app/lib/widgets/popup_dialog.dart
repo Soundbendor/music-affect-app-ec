@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/colors/osu_colors.dart';
 
 class PopupDialog<T> extends PopupRoute<T> {
   final String title;
   final String message;
-  PopupDialog(
-      {Key? key,
-        required this.title,
-        required this.message})
-      : super();
+  PopupDialog({Key? key, required this.title, required this.message}) : super();
 
   @override
-  Color? get barrierColor => Colors.black.withAlpha(0x50);
+  Color? get barrierColor => OSUPrimaryColors.paddleTailBlack.withAlpha(0x50);
 
   // This allows the popup to be dismissed by tapping the scrim or by pressing
   // the escape key on the keyboard.
@@ -38,12 +35,11 @@ class PopupDialog<T> extends PopupRoute<T> {
             padding: const EdgeInsets.all(20.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
+              color: OSUPrimaryColors.bucktoothWhite,
             ),
             child: Column(
               children: <Widget>[
-                Text(title,
-                    style: Theme.of(context).textTheme.headlineSmall),
+                Text(title, style: Theme.of(context).textTheme.headlineSmall),
                 const SizedBox(height: 20),
                 Text(message),
               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/colors/osu_colors.dart';
 import '../widgets/tapper.dart';
 import '../widgets/popup_dialog.dart';
 
@@ -30,40 +31,37 @@ class TutorialTab extends StatelessWidget {
             ),
           ),
           Center(
-            child: Row(
-              children: [
-                IconButton(
-                  iconSize: 72,
-                  icon: const Icon(Icons.play_arrow),
-                  color: Colors.green,
-                  onPressed: () {
-                    Navigator.of(context).push(PopupDialog(
-                      title: "You pressed the\nplay button!",
-                      message: "Normally this will start the song.\n"
-                          "Click outside this box to close it.",
-                    ));
-                  },
-                ),
-                IconButton(
-                  iconSize: 72,
-                  icon: const Icon(Icons.done),
-                  color: Colors.red,
-                  onPressed: () {
-                    Navigator.of(context).push(PopupDialog(
-                      title: "You pressed the\ndone button!",
-                      message: "Normally this will make the Submit Data\n"
+              child: Row(children: [
+            IconButton(
+              iconSize: 72,
+              icon: const Icon(Icons.play_arrow),
+              color: OSUSecondaryColors.pineStand,
+              onPressed: () {
+                Navigator.of(context).push(PopupDialog(
+                  title: "You pressed the\nplay button!",
+                  message: "Normally this will start the song.\n"
+                      "Click outside this box to close it.",
+                ));
+              },
+            ),
+            IconButton(
+              iconSize: 72,
+              icon: const Icon(Icons.done),
+              color: OSUSecondaryColors.luminance,
+              onPressed: () {
+                Navigator.of(context).push(PopupDialog(
+                  title: "You pressed the\ndone button!",
+                  message: "Normally this will make the Submit Data\n"
                       "button appear. Click outside this box to close it.",
-                    ));
-                  },
-                ),
-              ]
-          )),
+                ));
+              },
+            ),
+          ])),
           Center(
-            child: Tapper(
-              addDataToArray: (List<double> data) {},
-              shouldStartInterval: false,
-            )
-          )
+              child: Tapper(
+            addDataToArray: (List<double> data) {},
+            shouldStartInterval: false,
+          ))
         ],
       ),
     );
