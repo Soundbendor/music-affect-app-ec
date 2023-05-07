@@ -103,7 +103,7 @@ class _TapperState extends State<Tapper> {
               children: [
                 Row(children: [
                   Material(
-                      color: ColorBlindSafeColors.magenta,
+                      color: ColorBlindSafeColors.orange,
                       child: InkWell(
                           onTap: () {},
                           child: Container(
@@ -115,7 +115,7 @@ class _TapperState extends State<Tapper> {
                             height: gridSize,
                           ))),
                   Material(
-                      color: ColorBlindSafeColors.orange,
+                      color: ColorBlindSafeColors.red,
                       child: InkWell(
                           onTap: () {},
                           child: Container(
@@ -129,7 +129,7 @@ class _TapperState extends State<Tapper> {
                 ]),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Material(
-                      color: ColorBlindSafeColors.grey,
+                      color: ColorBlindSafeColors.cyan,
                       child: InkWell(
                           onTap: () {},
                           child: Container(
@@ -141,7 +141,7 @@ class _TapperState extends State<Tapper> {
                             height: gridSize,
                           ))),
                   Material(
-                      color: ColorBlindSafeColors.cyan,
+                      color: ColorBlindSafeColors.blue,
                       child: InkWell(
                           onTap: () {},
                           child: Container(

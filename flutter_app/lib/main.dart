@@ -16,8 +16,8 @@ Future<http.Response> fetchData() {
 
 void main() async {
   if (kDebugMode) {
-    var data = await fetchData();
-    print(data.body);
+    //var data = await fetchData();
+    //print(data.body);
   }
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');

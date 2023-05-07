@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:flutter_app/colors/color_blind_safe_colors.dart';
 import 'package:flutter_app/colors/osu_colors.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -285,7 +286,7 @@ class _PlayRouteState extends State<PlayRoute> {
                                           IconButton(
                                             iconSize: 72,
                                             icon: const Icon(Icons.done),
-                                            color: OSUSecondaryColors.luminance,
+                                            color: ColorBlindSafeColors.blue,
                                             onPressed: () async {
                                               setCurrentTrackEnded();
                                               await SpotifySdk.pause();

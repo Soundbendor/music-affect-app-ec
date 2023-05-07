@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/colors/color_blind_safe_colors.dart';
 import 'package:flutter_app/colors/osu_colors.dart';
 import '../widgets/tapper.dart';
 import '../widgets/popup_dialog.dart';
@@ -47,7 +48,7 @@ class TutorialTab extends StatelessWidget {
             IconButton(
               iconSize: 72,
               icon: const Icon(Icons.done),
-              color: OSUSecondaryColors.luminance,
+              color: ColorBlindSafeColors.blue,
               onPressed: () {
                 Navigator.of(context).push(PopupDialog(
                   title: "You pressed the\ndone button!",
