@@ -188,17 +188,61 @@ class _PlayRouteState extends State<PlayRoute> {
                         Column(
                           children: [
                             Row(
-                              children: const [Text('Time Left:')],
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Text(
+                                      'Currently playing:',
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontStyle: FontStyle.italic,
+                                    )
+                                  ),
+                                ),
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          track.name,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            overflow: TextOverflow.ellipsis,
+                                          )
+                                        ),
+                                        Text('by ${track.artist.name}',
+                                        style: const TextStyle(
+                                            fontSize: 17,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),),
+                                        Text('from ${track.album.name}',
+                                            style: const TextStyle(
+                                            fontSize: 15,
+                                              overflow: TextOverflow.ellipsis,
+                                        )),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
-                            LinearProgressIndicator(
-                              value: playerState.playbackPosition /
-                                  track.duration!,
-                              semanticsLabel: 'Linear progress indicator',
+                            Padding(
+                              padding: const EdgeInsets.all(24),
+                              child: LinearProgressIndicator(
+                                minHeight: 10,
+                                color: ColorBlindSafeColors.red,
+                                backgroundColor: ColorBlindSafeColors.grey,
+                                value: playerState.playbackPosition /
+                                    track.duration!,
+                                semanticsLabel: 'Linear progress indicator',
+                              ),
                             )
                           ],
                         ),
-                        Text(
-                            '${track.name} by ${track.artist.name} from the album ${track.album.name}'),
                         Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
