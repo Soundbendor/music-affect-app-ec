@@ -110,7 +110,7 @@ class _PlayRouteState extends State<PlayRoute> {
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Here we get the connection status
             StreamBuilder<ConnectionStatus>(
@@ -138,10 +138,9 @@ class _PlayRouteState extends State<PlayRoute> {
                               try {
                                 var result =
                                     await SpotifySdk.connectToSpotifyRemote(
-                                        clientId: dotenv.env['CLIENT_ID']
-                                            .toString(),
-                                        redirectUrl: dotenv
-                                            .env['REDIRECT_URL']
+                                        clientId:
+                                            dotenv.env['CLIENT_ID'].toString(),
+                                        redirectUrl: dotenv.env['REDIRECT_URL']
                                             .toString(),
                                         spotifyUri:
                                             'spotify:track:1bpnYrDCforv9ctJMzJRV8');
@@ -153,17 +152,13 @@ class _PlayRouteState extends State<PlayRoute> {
                             child: Container(
                                 decoration: const BoxDecoration(
                                     color: ColorBlindSafeColors.red,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10)
-                                    )
-                                ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
                                 padding: const EdgeInsets.all(12),
-                                child: const Text(
-                                    "Connect to Spotify",
+                                child: const Text("Connect to Spotify",
                                     style: TextStyle(
                                       color: OSUPrimaryColors.bucktoothWhite,
-                                    ))
-                            )),
+                                    )))),
                       );
                     }
                     // set the current recording track if it hasn't already been set
@@ -185,67 +180,69 @@ class _PlayRouteState extends State<PlayRoute> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Text(
-                                      'Currently playing:',
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontStyle: FontStyle.italic,
-                                    )
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          track.name,
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            overflow: TextOverflow.ellipsis,
-                                          )
-                                        ),
-                                        Text('by ${track.artist.name}',
-                                        style: const TextStyle(
-                                            fontSize: 17,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),),
-                                        Text('from ${track.album.name}',
-                                            style: const TextStyle(
-                                            fontSize: 15,
-                                              overflow: TextOverflow.ellipsis,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Text('Currently playing:',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontStyle: FontStyle.italic,
                                         )),
-                                      ],
-                                    ),
                                   ),
-                                )
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(24),
-                              child: LinearProgressIndicator(
-                                minHeight: 10,
-                                color: ColorBlindSafeColors.red,
-                                backgroundColor: ColorBlindSafeColors.grey,
-                                value: playerState.playbackPosition /
-                                    track.duration!,
-                                semanticsLabel: 'Linear progress indicator',
+                                  Flexible(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(track.name,
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                overflow: TextOverflow.ellipsis,
+                                              )),
+                                          Text(
+                                            'by ${track.artist.name}',
+                                            style: const TextStyle(
+                                              fontSize: 17,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Text('from ${track.album.name}',
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                overflow: TextOverflow.ellipsis,
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                            )
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: LinearProgressIndicator(
+                                  minHeight: 10,
+                                  color: ColorBlindSafeColors.red,
+                                  backgroundColor: ColorBlindSafeColors.grey,
+                                  value: playerState.playbackPosition /
+                                      track.duration!,
+                                  semanticsLabel: 'Linear progress indicator',
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                         Center(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: currentRecording.isReadyToSubmit
                                     ? [
                                         TextButton(
@@ -266,8 +263,7 @@ class _PlayRouteState extends State<PlayRoute> {
                                                   i++) {
                                                 time_sampled.add(
                                                     currentRecording
-                                                            .affectDataArray[
-                                                        i][0]);
+                                                        .affectDataArray[i][0]);
                                                 valence.add(currentRecording
                                                     .affectDataArray[i][1]);
                                                 arousal.add(currentRecording
@@ -280,20 +276,19 @@ class _PlayRouteState extends State<PlayRoute> {
                                                         "user_data": {
                                                           "user_id": rand
                                                               .nextInt(9999),
-                                                          "location":
-                                                              "nowhere"
+                                                          "location": "nowhere"
                                                         },
                                                         "song_data": {
-                                                          "song_uri":
-                                                              track.uri,
+                                                          "song_uri": track.uri,
                                                           "title": track.name,
-                                                          "artist": track
-                                                              .artist.name,
-                                                          "album": track
-                                                              .album.name,
-                                                          "seconds": track
-                                                                  .duration ~/
-                                                              1000, // Spotify SDK returns ms but we want to store seconds
+                                                          "artist":
+                                                              track.artist.name,
+                                                          "album":
+                                                              track.album.name,
+                                                          "seconds":
+                                                              track.duration ~/
+                                                                  1000,
+                                                          // Spotify SDK returns ms but we want to store seconds
                                                         },
                                                         "affect_data": {
                                                           "valence": valence,
@@ -321,19 +316,20 @@ class _PlayRouteState extends State<PlayRoute> {
                                               ));
                                             },
                                             child: Container(
-                                              decoration: const BoxDecoration(
-                                                  color: ColorBlindSafeColors.red,
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(10)
-                                                )
-                                              ),
-                                                padding: const EdgeInsets.all(12),
-                                                child: const Text(
-                                                    "Confirm",
-                                                      style: TextStyle(
-                                                      color: OSUPrimaryColors.bucktoothWhite,
-                                                      ))
-                                            )),
+                                                decoration: const BoxDecoration(
+                                                    color: ColorBlindSafeColors
+                                                        .red,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10))),
+                                                padding:
+                                                    const EdgeInsets.all(12),
+                                                child: const Text("Confirm",
+                                                    style: TextStyle(
+                                                      color: OSUPrimaryColors
+                                                          .bucktoothWhite,
+                                                    )))),
                                       ]
                                     : [
                                         TextButton(
@@ -349,26 +345,25 @@ class _PlayRouteState extends State<PlayRoute> {
                                               : null,
                                           child: Container(
                                             decoration: BoxDecoration(
-                                              color: playerState.isPaused ? ColorBlindSafeColors.cyan : ColorBlindSafeColors.grey,
-                                                borderRadius: const BorderRadius.all(
-                                                    Radius.circular(10)
-                                                )
-                                            ),
+                                                color: playerState.isPaused
+                                                    ? ColorBlindSafeColors.cyan
+                                                    : ColorBlindSafeColors.grey,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(10))),
                                             padding: const EdgeInsets.all(10),
-                                            child: Row(
-                                                children: const [
-                                                  Icon(
-                                                    Icons.play_arrow,
-                                                    color: OSUPrimaryColors.bucktoothWhite,
-                                                  ),
-                                                  Text(
-                                                    "Play track",
-                                                    style: TextStyle(
-                                                        color: OSUPrimaryColors.bucktoothWhite,
-                                                    )
-                                                  )
-                                                ]
-                                            ),
+                                            child: Row(children: const [
+                                              Icon(
+                                                Icons.play_arrow,
+                                                color: OSUPrimaryColors
+                                                    .bucktoothWhite,
+                                              ),
+                                              Text("Play track",
+                                                  style: TextStyle(
+                                                    color: OSUPrimaryColors
+                                                        .bucktoothWhite,
+                                                  ))
+                                            ]),
                                           ),
                                         ),
                                         TextButton(
@@ -378,26 +373,23 @@ class _PlayRouteState extends State<PlayRoute> {
                                           },
                                           child: Container(
                                             decoration: const BoxDecoration(
-                                              color: ColorBlindSafeColors.blue,
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(10)
-                                              )
-                                            ),
+                                                color:
+                                                    ColorBlindSafeColors.blue,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10))),
                                             padding: const EdgeInsets.all(10),
-                                            child: Row(
-                                                children: const [
-                                                  Icon(
-                                                      Icons.done,
-                                                      color: OSUPrimaryColors.bucktoothWhite,
-                                                  ),
-                                                  Text(
-                                                      "Submit data",
-                                                      style: TextStyle(
-                                                          color: OSUPrimaryColors.bucktoothWhite,
-                                                      )
-                                                  )
-                                                ]
-                                            ),
+                                            child: Row(children: const [
+                                              Icon(
+                                                Icons.done,
+                                                color: OSUPrimaryColors
+                                                    .bucktoothWhite,
+                                              ),
+                                              Text("Submit data",
+                                                  style: TextStyle(
+                                                    color: OSUPrimaryColors
+                                                        .bucktoothWhite,
+                                                  ))
+                                            ]),
                                           ),
                                         ),
                                       ])),
@@ -407,16 +399,26 @@ class _PlayRouteState extends State<PlayRoute> {
                 );
               },
             ),
-            Text(currentRecording.affectDataArray.isNotEmpty
-                ? currentRecording.affectDataArray
-                    .map((item) => item.map((x) => x.toStringAsFixed(2)))
-                    .toList()
-                    .last
-                    .toString()
-                : ""),
-            Tapper(
-                addDataToArray: addDataToArray,
-                shouldStartInterval: currentRecording.isRecording)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Tapper(
+                  addDataToArray: addDataToArray,
+                  shouldStartInterval: currentRecording.isRecording),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(currentRecording.affectDataArray.isNotEmpty
+                  ? "Last coordinates tapped: (${currentRecording.affectDataArray
+                  .last[1]
+                  .toStringAsFixed(2)}, ${currentRecording.affectDataArray
+                  .last[2]
+                  .toStringAsFixed(2)})"
+                  : "",
+                style: const TextStyle(
+                  fontSize: 15
+                ),
+              ),
+            ),
           ],
         ));
   }
