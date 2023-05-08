@@ -8,8 +8,8 @@ model responses {
   heard_song_before   Boolean?
   heard_artist_before Boolean?
   ad_played           Boolean?  @default(false)
-  songs               songs     @relation(fields: [song_uri], references: [song_uri], onDelete: NoAction, onUpdate: NoAction)
-  users               users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user")
+  songs               songs     @relation(fields: [song_uri], references: [song_uri], onDelete: Cascade, onUpdate: NoAction)
+  users               users     @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user")
 
   @@id([user_id, song_uri])
 }
