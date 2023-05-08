@@ -95,222 +95,285 @@ class _PlayRouteState extends State<PlayRoute> {
     // than having to individually change instances of widgets.
     return Scaffold(
         appBar: AppBar(title: const Text('Music Affect Data')),
-        body: Center(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-          child: Column(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Invoke "debug painting" (press "p" in the console, choose the
-            // "Toggle Debug Paint" action from the Flutter Inspector in Android
-            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-            // to see the wireframe for each widget.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Here we get the connection status
-              StreamBuilder<ConnectionStatus>(
-                stream: SpotifySdk.subscribeConnectionStatus(),
-                builder: (thing, connectionSnapshot) {
-                  _connected = false;
-                  var data = connectionSnapshot.data;
-                  print(data?.connected);
-                  if (data != null) {
-                    _connected = data.connected;
-                  }
-                  // and then we subscribe to player state
-                  return StreamBuilder<PlayerState>(
-                    stream: SpotifySdk.subscribePlayerState(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<PlayerState> snapshot) {
-                      var track = snapshot.data?.track;
-                      var playerState = snapshot.data;
+        body: Column(
+          // Column is also a layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Invoke "debug painting" (press "p" in the console, choose the
+          // "Toggle Debug Paint" action from the Flutter Inspector in Android
+          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+          // to see the wireframe for each widget.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Here we get the connection status
+            StreamBuilder<ConnectionStatus>(
+              stream: SpotifySdk.subscribeConnectionStatus(),
+              builder: (thing, connectionSnapshot) {
+                _connected = false;
+                var data = connectionSnapshot.data;
+                print(data?.connected);
+                if (data != null) {
+                  _connected = data.connected;
+                }
+                // and then we subscribe to player state
+                return StreamBuilder<PlayerState>(
+                  stream: SpotifySdk.subscribePlayerState(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<PlayerState> snapshot) {
+                    var track = snapshot.data?.track;
+                    var playerState = snapshot.data;
 
-                      if (playerState == null || track == null) {
-                        return Center(
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                await dotenv.load(fileName: '.env');
-                                try {
-                                  var result =
-                                      await SpotifySdk.connectToSpotifyRemote(
-                                          clientId: dotenv.env['CLIENT_ID']
-                                              .toString(),
-                                          redirectUrl: dotenv
-                                              .env['REDIRECT_URL']
-                                              .toString(),
-                                          spotifyUri:
-                                              'spotify:track:1bpnYrDCforv9ctJMzJRV8');
-                                  print(result);
-                                } catch (e) {
-                                  print(e);
-                                }
-                              },
-                              child: Text("Connect to Spotify")),
-                        );
-                      }
-                      // set the current recording track if it hasn't already been set
-                      if (Platform.isIOS &&
-                          currentRecording.currentRecordingTrack == null) {
-                        currentRecording.currentRecordingTrack = track;
-                      }
-                      // Here we check to see if the track has changed
-                      // if so, update the currentRecordings state and pause
-                      if (!currentRecording.isReadyToSubmit &&
-                          currentRecording.isRecording &&
-                          track.uri !=
-                              currentRecording.currentRecordingTrack?.uri) {
-                        currentRecording.currentTrackEnded();
-                        SpotifySdk.pause();
-                      }
-
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Column(
-                            children: [
-                              Row(
-                                children: const [Text('Time Left:')],
-                              ),
-                              LinearProgressIndicator(
-                                value: playerState.playbackPosition /
-                                    track.duration!,
-                                semanticsLabel: 'Linear progress indicator',
-                              )
-                            ],
-                          ),
-                          Text(
-                              '${track.name} by ${track.artist.name} from the album ${track.album.name}'),
-                          Center(
-                              child: Row(
-                                  children: currentRecording.isReadyToSubmit
-                                      ? [
-                                          ElevatedButton(
-                                              onPressed: () async {
-                                                var url = Uri.https(
-                                                    'qzb9rm0k6c.execute-api.us-west-2.amazonaws.com',
-                                                    'test/resource');
-                                                Random rand = Random();
-
-                                                var valence = [];
-                                                var arousal = [];
-                                                var time_sampled = [];
-                                                for (var i = 0;
-                                                    i <
-                                                        currentRecording
-                                                            .affectDataArray
-                                                            .length;
-                                                    i++) {
-                                                  time_sampled.add(
-                                                      currentRecording
-                                                              .affectDataArray[
-                                                          i][0]);
-                                                  valence.add(currentRecording
-                                                      .affectDataArray[i][1]);
-                                                  arousal.add(currentRecording
-                                                      .affectDataArray[i][2]);
-                                                }
-
-                                                var serverResponse =
-                                                    await http.post(url,
-                                                        body: jsonEncode({
-                                                          "user_data": {
-                                                            "user_id": rand
-                                                                .nextInt(9999),
-                                                            "location":
-                                                                "nowhere"
-                                                          },
-                                                          "song_data": {
-                                                            "song_uri":
-                                                                track.uri,
-                                                            "title": track.name,
-                                                            "artist": track
-                                                                .artist.name,
-                                                            "album": track
-                                                                .album.name,
-                                                            "seconds": track
-                                                                    .duration ~/
-                                                                1000, // Spotify SDK returns ms but we want to store seconds
-                                                          },
-                                                          "affect_data": {
-                                                            "valence": valence,
-                                                            "arousal": arousal,
-                                                            "time_sampled":
-                                                                time_sampled,
-                                                          }
-                                                        }));
-
-                                                print(
-                                                    'Data recorded: ${currentRecording.affectDataArray}');
-                                                print(
-                                                    'Current Track: ${track.name}');
-                                                print('Fake user data');
-                                                print(
-                                                    'Server Response: $serverResponse');
-                                                // go back to home page
-                                                Navigator.pop(context);
-
-                                                Navigator.of(context)
-                                                    .push(PopupDialog(
-                                                  title:
-                                                      "Status Code:\n${serverResponse.statusCode}",
-                                                  message: serverResponse.body,
-                                                ));
-                                              },
-                                              child: const Text("Submit Data")),
-                                        ]
-                                      : [
-                                          IconButton(
-                                            iconSize: 72,
-                                            icon: const Icon(Icons.play_arrow),
-                                            color: OSUSecondaryColors.pineStand,
-                                            onPressed: playerState.isPaused
-                                                ? () async {
-                                                    await SpotifySdk.play(
-                                                        spotifyUri:
-                                                            'spotify:track:1bpnYrDCforv9ctJMzJRV8');
-
-                                                    setCurrentRecordingTrack(
-                                                        track);
-                                                  }
-                                                : null,
-                                          ),
-                                          IconButton(
-                                            iconSize: 72,
-                                            icon: const Icon(Icons.done),
-                                            color: ColorBlindSafeColors.blue,
-                                            onPressed: () async {
-                                              setCurrentTrackEnded();
-                                              await SpotifySdk.pause();
-                                            },
-                                          ),
-                                        ])),
-                        ],
+                    if (playerState == null || track == null) {
+                      return Center(
+                        child: TextButton(
+                            onPressed: () async {
+                              await dotenv.load(fileName: '.env');
+                              try {
+                                var result =
+                                    await SpotifySdk.connectToSpotifyRemote(
+                                        clientId: dotenv.env['CLIENT_ID']
+                                            .toString(),
+                                        redirectUrl: dotenv
+                                            .env['REDIRECT_URL']
+                                            .toString(),
+                                        spotifyUri:
+                                            'spotify:track:1bpnYrDCforv9ctJMzJRV8');
+                                print(result);
+                              } catch (e) {
+                                print(e);
+                              }
+                            },
+                            child: Container(
+                                decoration: const BoxDecoration(
+                                    color: ColorBlindSafeColors.red,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10)
+                                    )
+                                ),
+                                padding: const EdgeInsets.all(12),
+                                child: const Text(
+                                    "Connect to Spotify",
+                                    style: TextStyle(
+                                      color: OSUPrimaryColors.bucktoothWhite,
+                                    ))
+                            )),
                       );
-                    },
-                  );
-                },
-              ),
-              Text(currentRecording.affectDataArray.isNotEmpty
-                  ? currentRecording.affectDataArray
-                      .map((item) => item.map((x) => x.toStringAsFixed(2)))
-                      .toList()
-                      .last
-                      .toString()
-                  : ""),
-              Tapper(
-                  addDataToArray: addDataToArray,
-                  shouldStartInterval: currentRecording.isRecording)
-            ],
-          ),
+                    }
+                    // set the current recording track if it hasn't already been set
+                    if (Platform.isIOS &&
+                        currentRecording.currentRecordingTrack == null) {
+                      currentRecording.currentRecordingTrack = track;
+                    }
+                    // Here we check to see if the track has changed
+                    // if so, update the currentRecordings state and pause
+                    if (!currentRecording.isReadyToSubmit &&
+                        currentRecording.isRecording &&
+                        track.uri !=
+                            currentRecording.currentRecordingTrack?.uri) {
+                      currentRecording.currentTrackEnded();
+                      SpotifySdk.pause();
+                    }
+
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Column(
+                          children: [
+                            Row(
+                              children: const [Text('Time Left:')],
+                            ),
+                            LinearProgressIndicator(
+                              value: playerState.playbackPosition /
+                                  track.duration!,
+                              semanticsLabel: 'Linear progress indicator',
+                            )
+                          ],
+                        ),
+                        Text(
+                            '${track.name} by ${track.artist.name} from the album ${track.album.name}'),
+                        Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                                children: currentRecording.isReadyToSubmit
+                                    ? [
+                                        TextButton(
+                                            onPressed: () async {
+                                              var url = Uri.https(
+                                                  'qzb9rm0k6c.execute-api.us-west-2.amazonaws.com',
+                                                  'test/resource');
+                                              Random rand = Random();
+
+                                              var valence = [];
+                                              var arousal = [];
+                                              var time_sampled = [];
+                                              for (var i = 0;
+                                                  i <
+                                                      currentRecording
+                                                          .affectDataArray
+                                                          .length;
+                                                  i++) {
+                                                time_sampled.add(
+                                                    currentRecording
+                                                            .affectDataArray[
+                                                        i][0]);
+                                                valence.add(currentRecording
+                                                    .affectDataArray[i][1]);
+                                                arousal.add(currentRecording
+                                                    .affectDataArray[i][2]);
+                                              }
+
+                                              var serverResponse =
+                                                  await http.post(url,
+                                                      body: jsonEncode({
+                                                        "user_data": {
+                                                          "user_id": rand
+                                                              .nextInt(9999),
+                                                          "location":
+                                                              "nowhere"
+                                                        },
+                                                        "song_data": {
+                                                          "song_uri":
+                                                              track.uri,
+                                                          "title": track.name,
+                                                          "artist": track
+                                                              .artist.name,
+                                                          "album": track
+                                                              .album.name,
+                                                          "seconds": track
+                                                                  .duration ~/
+                                                              1000, // Spotify SDK returns ms but we want to store seconds
+                                                        },
+                                                        "affect_data": {
+                                                          "valence": valence,
+                                                          "arousal": arousal,
+                                                          "time_sampled":
+                                                              time_sampled,
+                                                        }
+                                                      }));
+
+                                              print(
+                                                  'Data recorded: ${currentRecording.affectDataArray}');
+                                              print(
+                                                  'Current Track: ${track.name}');
+                                              print('Fake user data');
+                                              print(
+                                                  'Server Response: $serverResponse');
+                                              // go back to home page
+                                              Navigator.pop(context);
+
+                                              Navigator.of(context)
+                                                  .push(PopupDialog(
+                                                title:
+                                                    "Status Code:\n${serverResponse.statusCode}",
+                                                message: serverResponse.body,
+                                              ));
+                                            },
+                                            child: Container(
+                                              decoration: const BoxDecoration(
+                                                  color: ColorBlindSafeColors.red,
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)
+                                                )
+                                              ),
+                                                padding: const EdgeInsets.all(12),
+                                                child: const Text(
+                                                    "Confirm",
+                                                      style: TextStyle(
+                                                      color: OSUPrimaryColors.bucktoothWhite,
+                                                      ))
+                                            )),
+                                      ]
+                                    : [
+                                        TextButton(
+                                          onPressed: playerState.isPaused
+                                              ? () async {
+                                                  await SpotifySdk.play(
+                                                      spotifyUri:
+                                                          'spotify:track:1bpnYrDCforv9ctJMzJRV8');
+
+                                                  setCurrentRecordingTrack(
+                                                      track);
+                                                }
+                                              : null,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: playerState.isPaused ? ColorBlindSafeColors.cyan : ColorBlindSafeColors.grey,
+                                                borderRadius: const BorderRadius.all(
+                                                    Radius.circular(10)
+                                                )
+                                            ),
+                                            padding: const EdgeInsets.all(10),
+                                            child: Row(
+                                                children: const [
+                                                  Icon(
+                                                    Icons.play_arrow,
+                                                    color: OSUPrimaryColors.bucktoothWhite,
+                                                  ),
+                                                  Text(
+                                                    "Play track",
+                                                    style: TextStyle(
+                                                        color: OSUPrimaryColors.bucktoothWhite,
+                                                    )
+                                                  )
+                                                ]
+                                            ),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            setCurrentTrackEnded();
+                                            await SpotifySdk.pause();
+                                          },
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              color: ColorBlindSafeColors.blue,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10)
+                                              )
+                                            ),
+                                            padding: const EdgeInsets.all(10),
+                                            child: Row(
+                                                children: const [
+                                                  Icon(
+                                                      Icons.done,
+                                                      color: OSUPrimaryColors.bucktoothWhite,
+                                                  ),
+                                                  Text(
+                                                      "Submit data",
+                                                      style: TextStyle(
+                                                          color: OSUPrimaryColors.bucktoothWhite,
+                                                      )
+                                                  )
+                                                ]
+                                            ),
+                                          ),
+                                        ),
+                                      ])),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+            Text(currentRecording.affectDataArray.isNotEmpty
+                ? currentRecording.affectDataArray
+                    .map((item) => item.map((x) => x.toStringAsFixed(2)))
+                    .toList()
+                    .last
+                    .toString()
+                : ""),
+            Tapper(
+                addDataToArray: addDataToArray,
+                shouldStartInterval: currentRecording.isRecording)
+          ],
         ));
   }
 }
