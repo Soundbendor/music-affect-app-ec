@@ -9,62 +9,93 @@ class TutorialTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Material is a conceptual piece
-    // of paper on which the UI appears.
+    final PageController _controller = PageController();
+
     return Material(
-      // Column is a vertical, linear layout.
-      child: Column(
-        children: [
-          const Center(
-            child: Text(
-              "On the song screen, you'll see a layout like this. Pressing "
-              "the play button will begin the song, and you'll be able to "
-              "tap on the grid to record your emotional response. Higher on "
-              "the grid represents \"arousal\", or how excited and intense "
-              "the music makes you feel. Lower on the grid represents lower "
-              "arousal, less energy/intensity. Rightward on the grid "
-              "represents higher \"valence\", which is how positive/happy "
-              "the music makes you feel, and leftward is how sad/angry/"
-              "negative you feel. Your most recent tap is recorded at one "
-              "second intervals. When you're done, press the checkmark "
-              "button and a \"Submit Data\" button will appear. Press it "
-              "to send your response data to the database.",
+        child: PageView(
+            controller: _controller,
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+          // PAGE 0
+          Column(children: [
+            TextButton(
+                // NEXT button
+                onPressed: () {
+                  _controller.animateToPage(1,
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.easeIn);
+                },
+                child: Text("Next")),
+            const Text(
+              "In this app, you will use a valence/arousal chart to report your emotional response to a song."
+              "\n\nHigh arousal represents feelings of high energy, while low arousal represents feelings of low energy."
+              "\n\nHigh valence represents positive feelings, while low valence represents negative feelings.",
+              style: TextStyle(fontSize: 17),
+              textAlign: TextAlign.center,
             ),
-          ),
-          Center(
-              child: Row(children: [
-            IconButton(
-              iconSize: 72,
-              icon: const Icon(Icons.play_arrow),
-              color: OSUSecondaryColors.pineStand,
-              onPressed: () {
-                Navigator.of(context).push(PopupDialog(
-                  title: "You pressed the\nplay button!",
-                  message: "Normally this will start the song.\n"
-                      "Click outside this box to close it.",
-                ));
-              },
+            Tapper(
+              addDataToArray: (List<double> tutorialData) {},
+              shouldStartInterval: false,
             ),
-            IconButton(
-              iconSize: 72,
-              icon: const Icon(Icons.done),
-              color: ColorBlindSafeColors.blue,
-              onPressed: () {
-                Navigator.of(context).push(PopupDialog(
-                  title: "You pressed the\ndone button!",
-                  message: "Normally this will make the Submit Data\n"
-                      "button appear. Click outside this box to close it.",
-                ));
-              },
+          ]),
+
+          // PAGE 1
+          Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                    // BACK button
+                    onPressed: () {
+                      _controller.animateToPage(0,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeIn);
+                    },
+                    child: Text("Back")),
+                TextButton(
+                    // NEXT button
+                    onPressed: () {
+                      _controller.animateToPage(2,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeIn);
+                    },
+                    child: Text("Next")),
+              ],
             ),
-          ])),
-          Center(
-              child: Tapper(
-            addDataToArray: (List<double> data) {},
-            shouldStartInterval: false,
-          ))
-        ],
-      ),
-    );
+            const Text(
+              "The data collection screen looks like this."
+              "\n\nTapping the play button will begin the data collection process. Your selected song will begin to play through the Spotify app."
+              "\n\nAs you listen to the song, tap locations on the chart that represent what the song is making you feel in each moment.",
+              style: TextStyle(fontSize: 17),
+              textAlign: TextAlign.center,
+            ),
+            Tapper(
+              addDataToArray: (List<double> tutorialData) {},
+              shouldStartInterval: false,
+            )
+          ]),
+
+          // PAGE 2
+          Column(children: [
+            TextButton(
+                // BACK button
+                onPressed: () {
+                  _controller.animateToPage(1,
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.easeIn);
+                },
+                child: Text("Back")),
+            const Text(
+              "When the song ends, you will be asked to submit your data to the database."
+              "\n\nYou can report data for the same song multiple times, but your most recent report will replace any earlier reports. You can also always choose to delete all of your response data from the settings screen.",
+              style: TextStyle(fontSize: 17),
+              textAlign: TextAlign.center,
+            ),
+            Tapper(
+              addDataToArray: (List<double> tutorialData) {},
+              shouldStartInterval: false,
+            ),
+          ]),
+        ]));
   }
 }
