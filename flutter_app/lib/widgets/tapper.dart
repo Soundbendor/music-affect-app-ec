@@ -76,11 +76,23 @@ class _TapperState extends State<Tapper> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Text("High arousal"),
+      const Padding(
+        padding: EdgeInsets.all(8),
+        child: Text(
+          "High arousal",
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const RotatedBox(
-          quarterTurns: -1,
-          child: Text("Low valence"),
+        const Padding(
+          padding: EdgeInsets.all(8),
+          child: RotatedBox(
+            quarterTurns: -1,
+            child: Text(
+              "Low valence",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
         ),
         Listener(
             onPointerDown: (PointerDownEvent event) {
@@ -198,9 +210,23 @@ class _TapperState extends State<Tapper> {
                 ])
               ],
             )),
-        const RotatedBox(quarterTurns: 1, child: Text("High valence"))
+        const Padding(
+          padding: EdgeInsets.all(8),
+          child: RotatedBox(
+              quarterTurns: 1,
+              child: Text(
+                "High valence",
+                style: TextStyle(fontSize: 20),
+              )),
+        )
       ]),
-      const Text("Low arousal")
+      const Padding(
+        padding: EdgeInsets.all(8),
+        child: Text("Low arousal",
+          style: TextStyle(
+              fontSize: 20
+          ),),
+      )
     ]);
   }
 }
