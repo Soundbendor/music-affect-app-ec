@@ -103,25 +103,47 @@ class _TapperState extends State<Tapper> {
               children: [
                 Row(children: [
                   Material(
-                      color: ColorBlindSafeColors.orange,
                       child: InkWell(
                           onTap: () {},
                           child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(circleRadius)),
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(
+                                      width: 5,
+                                      color: ColorBlindSafeColors.blue),
+                                  left: BorderSide(
+                                      width: 5,
+                                      color: ColorBlindSafeColors.blue),
+                                  right: BorderSide(
+                                      width: 1,
+                                      color: ColorBlindSafeColors.blue),
+                                  bottom: BorderSide(
+                                      width: 1,
+                                      color: ColorBlindSafeColors.blue),
+                                ),
                                 color: Colors.transparent),
                             width: gridSize,
                             height: gridSize,
                           ))),
                   Material(
-                      color: ColorBlindSafeColors.red,
                       child: InkWell(
                           onTap: () {},
                           child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(circleRadius)),
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(
+                                      width: 5,
+                                      color: ColorBlindSafeColors.blue),
+                                  left: BorderSide(
+                                      width: 1,
+                                      color: ColorBlindSafeColors.blue),
+                                  right: BorderSide(
+                                      width: 5,
+                                      color: ColorBlindSafeColors.blue),
+                                  bottom: BorderSide(
+                                      width: 1,
+                                      color: ColorBlindSafeColors.blue),
+                                ),
                                 color: Colors.transparent),
                             width: gridSize,
                             height: gridSize,
@@ -129,26 +151,47 @@ class _TapperState extends State<Tapper> {
                 ]),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Material(
-                      color: ColorBlindSafeColors.cyan,
                       child: InkWell(
                           onTap: () {},
                           child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(circleRadius)),
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(
+                                      width: 1,
+                                      color: ColorBlindSafeColors.blue),
+                                  left: BorderSide(
+                                      width: 5,
+                                      color: ColorBlindSafeColors.blue),
+                                  right: BorderSide(
+                                      width: 1,
+                                      color: ColorBlindSafeColors.blue),
+                                  bottom: BorderSide(
+                                      width: 5,
+                                      color: ColorBlindSafeColors.blue),
+                                ),
                                 color: Colors.transparent),
                             width: gridSize,
                             height: gridSize,
                           ))),
                   Material(
-                      color: ColorBlindSafeColors.blue,
                       child: InkWell(
                           onTap: () {},
                           child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      bottomRight:
-                                          Radius.circular(circleRadius)),
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                    top: BorderSide(
+                                        width: 1,
+                                        color: ColorBlindSafeColors.blue),
+                                    left: BorderSide(
+                                        width: 1,
+                                        color: ColorBlindSafeColors.blue),
+                                    right: BorderSide(
+                                        width: 5,
+                                        color: ColorBlindSafeColors.blue),
+                                    bottom: BorderSide(
+                                        width: 5,
+                                        color: ColorBlindSafeColors.blue),
+                                  ),
                                   color: Colors.transparent),
                               width: gridSize,
                               height: gridSize)))
