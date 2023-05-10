@@ -110,7 +110,7 @@ class _PlayRouteState extends State<PlayRoute> {
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Here we get the connection status
             StreamBuilder<ConnectionStatus>(
@@ -182,12 +182,12 @@ class _PlayRouteState extends State<PlayRoute> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 30, horizontal: 20),
+                              vertical: 20, horizontal: 20),
                           child: Column(
                             children: [
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.center,
                                 children: [
                                   SizedBox(
                                       width: 100,
@@ -239,7 +239,7 @@ class _PlayRouteState extends State<PlayRoute> {
                                 ],
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(24),
+                                padding: const EdgeInsets.all(20),
                                 child: LinearProgressIndicator(
                                   minHeight: 10,
                                   color: ColorBlindSafeColors.red,
@@ -344,30 +344,33 @@ class _PlayRouteState extends State<PlayRoute> {
                                                     )))),
                                       ]
                                     : [
-                                        TextButton(
-                                          onPressed: () async {
-                                            setCurrentTrackEnded();
-                                            await SpotifySdk.pause();
-                                          },
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                                color:
-                                                    ColorBlindSafeColors.blue,
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(10))),
-                                            padding: const EdgeInsets.all(10),
-                                            child: Row(children: const [
-                                              Icon(
-                                                Icons.done,
-                                                color: OSUPrimaryColors
-                                                    .bucktoothWhite,
-                                              ),
-                                              Text("Submit data",
-                                                  style: TextStyle(
-                                                    color: OSUPrimaryColors
-                                                        .bucktoothWhite,
-                                                  ))
-                                            ]),
+                                        Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: TextButton(
+                                            onPressed: () async {
+                                              setCurrentTrackEnded();
+                                              await SpotifySdk.pause();
+                                            },
+                                            child: Container(
+                                              decoration: const BoxDecoration(
+                                                  color:
+                                                      ColorBlindSafeColors.blue,
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(10))),
+                                              padding: const EdgeInsets.all(10),
+                                              child: Row(children: const [
+                                                Icon(
+                                                  Icons.done,
+                                                  color: OSUPrimaryColors
+                                                      .bucktoothWhite,
+                                                ),
+                                                Text("Submit data",
+                                                    style: TextStyle(
+                                                      color: OSUPrimaryColors
+                                                          .bucktoothWhite,
+                                                    ))
+                                              ]),
+                                            ),
                                           ),
                                         ),
                                       ])),

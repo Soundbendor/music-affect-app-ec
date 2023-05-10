@@ -35,11 +35,13 @@ class HomeTab extends StatelessWidget {
           )),
           const Center(
             child: Text(
-              "Welcome! \nPress the musical note button above to\n"
-              "get started recording your emotional\n"
-              "response to music!",
-              textAlign: TextAlign.center,
-            ),
+                "Welcome! \n\n"
+                "Make sure you have the Spotify app\n"
+                "up and running on your device,\n"
+                "then press the musical note above \nto start recording your emotional\nresponse to music."
+                "\n\nYou can also navigate to the tutorial tab \nto learn how the process works.\n\n",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20)),
           ),
         ],
       ),
