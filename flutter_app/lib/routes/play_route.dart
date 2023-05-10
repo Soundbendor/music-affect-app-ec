@@ -181,21 +181,33 @@ class _PlayRouteState extends State<PlayRoute> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 30, horizontal: 20),
                           child: Column(
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
-                                  const Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Text('Currently playing:',
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          fontStyle: FontStyle.italic,
-                                        )),
-                                  ),
-                                  Flexible(
+                                  SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: IconButton(
+                                        onPressed: playerState.isPaused
+                                            ? () async {
+                                          await SpotifySdk.play(
+                                              spotifyUri:
+                                              'spotify:track:1bpnYrDCforv9ctJMzJRV8');
+
+                                          setCurrentRecordingTrack(
+                                              track);
+                                        }
+                                            : null,
+                                        icon: Icon(Icons.play_arrow,
+                                            size: 75,
+                                            color: playerState.isPaused ? ColorBlindSafeColors.teal : ColorBlindSafeColors.grey),
+                                      )),
+                                  Expanded(
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: Column(
@@ -333,40 +345,6 @@ class _PlayRouteState extends State<PlayRoute> {
                                       ]
                                     : [
                                         TextButton(
-                                          onPressed: playerState.isPaused
-                                              ? () async {
-                                                  await SpotifySdk.play(
-                                                      spotifyUri:
-                                                          'spotify:track:1bpnYrDCforv9ctJMzJRV8');
-
-                                                  setCurrentRecordingTrack(
-                                                      track);
-                                                }
-                                              : null,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                color: playerState.isPaused
-                                                    ? ColorBlindSafeColors.cyan
-                                                    : ColorBlindSafeColors.grey,
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(10))),
-                                            padding: const EdgeInsets.all(10),
-                                            child: Row(children: const [
-                                              Icon(
-                                                Icons.play_arrow,
-                                                color: OSUPrimaryColors
-                                                    .bucktoothWhite,
-                                              ),
-                                              Text("Play track",
-                                                  style: TextStyle(
-                                                    color: OSUPrimaryColors
-                                                        .bucktoothWhite,
-                                                  ))
-                                            ]),
-                                          ),
-                                        ),
-                                        TextButton(
                                           onPressed: () async {
                                             setCurrentTrackEnded();
                                             await SpotifySdk.pause();
@@ -407,16 +385,11 @@ class _PlayRouteState extends State<PlayRoute> {
             ),
             Padding(
               padding: const EdgeInsets.all(20),
-              child: Text(currentRecording.affectDataArray.isNotEmpty
-                  ? "Last coordinates tapped: (${currentRecording.affectDataArray
-                  .last[1]
-                  .toStringAsFixed(2)}, ${currentRecording.affectDataArray
-                  .last[2]
-                  .toStringAsFixed(2)})"
-                  : "",
-                style: const TextStyle(
-                  fontSize: 15
-                ),
+              child: Text(
+                currentRecording.affectDataArray.isNotEmpty
+                    ? "Last coordinates tapped: (${currentRecording.affectDataArray.last[1].toStringAsFixed(2)}, ${currentRecording.affectDataArray.last[2].toStringAsFixed(2)})"
+                    : "",
+                style: const TextStyle(fontSize: 15),
               ),
             ),
           ],
