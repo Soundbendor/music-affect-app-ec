@@ -1,16 +1,17 @@
 const { readAllResponses, filterSearch } = require('./read_data');
 const { processResponse } = require('./add_data');
 const { deleteUser, deleteSong, deleteResponse } = require('./delete_data');
+const { handler } = require('./index');
 
 const exampleSong = {
-    song_uri: "Fake URI",
+    song_uri: "Fake URI 2",
     title: "Example Title IV",
     artist: "Fake Artist",
     album: "Temp Album",
     seconds: 192,
 }
 const exampleUser = {
-    user_id: 488,
+    user_id: 489,
     age: 25,
     gender: "nonbinary",
     location: "Test #6",
@@ -26,6 +27,18 @@ const exampleData = {
     heard_song_before: true,
     heard_artist_before: true,
     ad_played: false,
+};
+
+const httpRequest = {
+    httpMethod: "GET",
+    body: JSON.stringify({
+        table: "songs",
+        user_id: exampleUser.user_id,
+        song_uri: exampleSong.song_uri,
+        user_data: exampleUser,
+        song_data: exampleSong,
+        affect_data: exampleData,
+    }),
 };
 
 //Example of using the readAllResponses function
@@ -61,9 +74,14 @@ function deleteThing(){
     deleteResponse(exampleUser.user_id, exampleSong.song_uri);
 }
 
+function serverThing(){
+    handler(httpRequest);
+}
+
 //addThing();
-readThing();
+//readThing();
 //deleteThing();
+console.log(serverThing());
 
 /*readAllResponses()
     .then(returnVal => {

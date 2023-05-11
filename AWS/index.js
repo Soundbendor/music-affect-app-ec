@@ -2,6 +2,7 @@
 console.log('Loading function');
 const { processResponse } = require('./add_data');
 const { readAllResponses }  = require('./read_data');
+const { deleteUser, deleteSong, deleteResponse } = require('./delete_data');
 exports.handler = async (event) => {
     
     let statusCode = 200;
@@ -41,7 +42,34 @@ exports.handler = async (event) => {
             console.log(err)
             response_body = "Validation error"
         }
-        
+    
+    // delete user data
+    } else if (event.httpMethod == "DELETE") {
+        const body = JSON.parse(event.body);
+
+        try {
+            switch (body.table) {
+                case "users":
+                    await deleteUser(body.user_id);
+                    response_body = "Successfully deleted user profile";
+                    break;
+                case "songs":
+                    await deleteSong(body.song_uri);
+                    response_body = "Successfully deleted song";
+                    break;
+                case "responses":
+                    await deleteResponse(body.user_id, body.song_uri);
+                    response_body = "Successfully deleted response";
+                    break;
+                default:
+                    response_body = `Unknown table specified: ${body.table}`;
+            }
+        } catch (err) {
+            statusCode = 400;
+            console.log(err);
+            response_body = "Error in deletion";
+        }
+
     } else {
         console.log("No HTTP method specified");
     }

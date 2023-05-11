@@ -5,7 +5,7 @@ module.exports.readAllResponses = async () => {
     let client = new PrismaClient();
 
     let retVal = await client.responses.findMany({
-        /*select: {
+        select: {
             valence: true,
             arousal: true,
             time_sampled: true,
@@ -13,13 +13,19 @@ module.exports.readAllResponses = async () => {
             heard_song_before: true,
             heard_artist_before: true,
             ad_played: true,
-            users: true,
+            users: {
+                select: {
+                    age: true,
+                    gender: true,
+                    location: true,
+                    primary_language: true,
+                    listening_habits: true,
+                    music_experience: true,
+                    hearing_loss: true,
+                }
+            },
             songs: true,
-        },*/
-        include: {
-            users: true,
-            songs: true,
-        }
+        },
     });
 
     await client.$disconnect();
