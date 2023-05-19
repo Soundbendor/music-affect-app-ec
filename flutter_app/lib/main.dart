@@ -6,6 +6,7 @@ import 'package:flutter_app/colors/osu_colors.dart';
 import 'package:flutter_app/routes/auth_gate.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
 
@@ -21,7 +22,7 @@ void main() async {
   }
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
-
+  var prefs = await SharedPreferences.getInstance();
   // await SpotifySdk.connectToSpotifyRemote(
   //     clientId: dotenv.env['CLIENT_ID'].toString(),
   //     redirectUrl: dotenv.env['REDIRECT_URL'].toString());
@@ -32,11 +33,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp(prefs));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SharedPreferences prefs;
+  const MyApp(this.prefs, {super.key});
 
   // This widget is the root of your application.
   @override
@@ -55,7 +57,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: createMaterialColor(OSUPrimaryColors.beaverOrange),
       ),
-      home: const AuthGate(),
+      home: AuthGate(preferences: prefs),
     );
   }
 }
