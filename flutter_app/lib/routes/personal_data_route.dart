@@ -4,8 +4,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PersonalDataRoute extends StatefulWidget {
   final SharedPreferences preferences;
   final String uuid;
+  final void Function() updateState;
   const PersonalDataRoute(
-      {Key? key, required this.preferences, required this.uuid})
+      {Key? key,
+      required this.preferences,
+      required this.uuid,
+      required this.updateState})
       : super(key: key);
 
   @override
@@ -178,8 +182,10 @@ class _PersonalDataRouteState extends State<PersonalDataRoute> {
                             },
                             child: const Text("Save")),
                         MaterialButton(
-                            onPressed: () => widget.preferences
-                                .setBool(widget.uuid, false),
+                            onPressed: () {
+                                widget.preferences.setBool(widget.uuid, false);
+                                widget.updateState();
+                            },
                             child: const Text("Skip")),
                       ],
                     )

@@ -8,9 +8,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../tabs/home_tab.dart';
 import '../tabs/tutorial_tab.dart';
 
-class AuthGate extends StatelessWidget {
+class AuthGate extends StatefulWidget {
   final SharedPreferences preferences;
-  const AuthGate({super.key, required this.preferences});
+  const AuthGate({Key? key,  required this.preferences}) : super(key: key);
+
+  @override
+  State<AuthGate> createState() => _AuthGateState();
+}
+
+class _AuthGateState extends State<AuthGate> {
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +27,11 @@ class AuthGate extends StatelessWidget {
           return const SignInRoute();
         }
 
-        if (preferences.getBool(snapshot.data?.uid ?? "") == null) {
+        if (widget.preferences.getBool(snapshot.data?.uid ?? "") == null) {
           return PersonalDataRoute(
-            preferences: preferences,
+            preferences: widget.preferences,
             uuid: snapshot.data?.uid ?? '',
+            updateState: () => setState(() {}),
           );
         }
 
