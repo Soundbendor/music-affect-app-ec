@@ -18,6 +18,9 @@ module.exports.deleteUser = async (user_id) => {
 
 module.exports.deleteSong = async (song_uri) => {
     let client = new PrismaClient
+    if(!findSong(song_uri, client)){
+        throw "Song does not exist.";
+    }
 
     await client.songs.delete({
         where: {

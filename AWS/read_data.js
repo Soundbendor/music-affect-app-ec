@@ -200,17 +200,19 @@ module.exports.validateSong = (song) => {
     }
 }
 
-//If a user with a matching id exists, returns it. Otherwise returns false
+//If a user with a matching id exists, returns it. Otherwise returns null
 module.exports.findUser = async (id, client) => {
-    let exists = await client.users.findUnique({
+    return await client.users.findUnique({
         where: {
             user_id: id
         }
-    })
+    });
+}
 
-    if(exists === null){
-        return false;
-    }
-
-    return exists;
+module.exports.findSong = async (uri, client) => {
+    return await client.songs.findUnique({
+        where: {
+            song_uri: uri
+        }
+    });
 }

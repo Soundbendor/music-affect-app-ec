@@ -4,7 +4,7 @@ const { deleteUser, deleteSong, deleteResponse } = require('./delete_data');
 const { handler } = require('./index');
 
 const exampleSong = {
-    song_uri: "Fake URI 2",
+    song_uri: "Fake URI III",
     title: "Example Title IV",
     artist: "Fake Artist",
     album: "Temp Album",
@@ -15,8 +15,8 @@ const exampleUser = {
     age: 25,
     gender: "nonbinary",
     location: "Test #6",
-    primary_language: "British",
-    listening_habits: "Every day",
+    primary_language: "American",
+    listening_habits: "Weekly",
     music_experience: null,
     hearing_loss: false,
 };
@@ -32,12 +32,17 @@ const exampleData = {
 const httpRequest = {
     httpMethod: "GET",
     body: JSON.stringify({
-        table: "songs",
+        //function: "search",
+        searchOptions: {
+            showArrays: false,
+            primary_language: "American",
+        },
+        table: "users",
         user_id: exampleUser.user_id,
         song_uri: exampleSong.song_uri,
         user_data: exampleUser,
         song_data: exampleSong,
-        affect_data: exampleData,
+        //affect_data: exampleData,
     }),
 };
 

@@ -1,7 +1,7 @@
 'use strict';
 console.log('Loading function');
-const { processResponse } = require('./add_data');
-const { readAllResponses }  = require('./read_data');
+const { processResponse, createUser, createSong, updateUser, updateSong } = require('./add_data');
+const { readAllResponses, filterSearch }  = require('./read_data');
 const { deleteUser, deleteSong, deleteResponse } = require('./delete_data');
 exports.handler = async (event) => {
     
@@ -11,30 +11,73 @@ exports.handler = async (event) => {
     
     // read data
     if(event.httpMethod == "GET") {
+        let res;
 
-        console.log("GET");
-        let res = await readAllResponses();
-        console.log("Retrieved data");
-        console.log(res);
-        response_body = res;
+        const body = event.body ? JSON.parse(event.body) : null;
+        if (body != null && body.function == "search") {
+            try {
+                res = await filterSearch(body.searchOptions);
+                console.log("Searched database");
+                console.log(res);
+                response_body = res;
+            } catch (err) {
+                statusCode = 400;
+                console.log(err);
+                response_body = "Error searching";
+            }
+        } else {
+            console.log("GET");
+            res = await readAllResponses();
+            console.log("Retrieved data");
+            console.log(res);
+            response_body = res;
+        }
         
     // submit app data
     } else if (event.httpMethod == "POST") {
         console.log("POST");
         const body = JSON.parse(event.body);
         console.log(body);
+
+        // if no table specified, default to responses
+        if (body.table == undefined) {
+            body.table == "responses";
+        }
         
         // get all client user response data from request body
         const { user_data, song_data, affect_data } = body;
-        console.log(song_data);
+        //console.log(song_data);
 
         try {
-            // see if database logs response properly
-            let res = await processResponse(affect_data, user_data, song_data)
+            let res;
 
-            console.log("Logged app data");
-            console.log(res);
-            response_body = "Successfully recorded affect response data";
+            switch (body.table) {
+                case "users":
+                    res = await createUser(user_data);
+                    console.log("Added user");
+                    console.log(res);
+                    response_body = "Successfully added user profile to database";
+                    break;
+
+                case "songs":
+                    res = await createSong(song_data);
+                    console.log("Added song");
+                    console.log(res);
+                    response_body = "Successfully added song to database";
+                    break;
+
+                case "responses":
+                    // see if database logs response properly
+                    res = await processResponse(affect_data, user_data, song_data)
+        
+                    console.log("Logged app data");
+                    console.log(res);
+                    response_body = "Successfully recorded affect response data";
+                    break;
+                
+                default:
+                    response_body = `Unknown table specified: ${body.table}`;
+            }
 
         } catch (err) {
             // catch validation errors
@@ -44,6 +87,33 @@ exports.handler = async (event) => {
         }
     
     // delete user data
+    } else if (event.httpMethod == "PUT") {
+        console.log("PUT");
+        const body = JSON.parse(event.body);
+        console.log(body);
+
+        try {
+            switch (body.table) {
+                case "users":
+                    await updateUser(body.user_data);
+                    response_body = "Successfully updated user profile";
+                    break;
+                case "songs":
+                    await updateSong(body.song_data);
+                    response_body = "Successfully updated song";
+                    break;
+                case "responses":
+                    response_body = "There's no dedicated function to update responses, use processResponse instead";
+                    break;
+                default:
+                    response_body = `Unknown table specified: ${body.table}`;
+            }
+        }
+        catch (err) {
+            statusCode = 400;
+            console.log(err);
+            response_body = "Error updating data";
+        }
     } else if (event.httpMethod == "DELETE") {
         const body = JSON.parse(event.body);
 

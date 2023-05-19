@@ -1,5 +1,5 @@
 const { PrismaClient } = require('@prisma/client')
-const { validateResponse, validateUser, findUser, validateSong } = require('./read_data')
+const { validateResponse, validateUser, findUser, validateSong, findSong } = require('./read_data')
 
 /*The function that adds response data to the database is processResponse. It takes the parameters
 (affect_data, user, song), each of which are objects containing the following data:
@@ -14,7 +14,7 @@ response with the new data. You may notice the date_recorded field in the Respon
 Don't worry about that, it's set to the current date automatically upon adding a response, 
 and the updateResponse function also sets it to the current date.*/
 
-//Takes a user object and adds it to the database. If it already exists, returns a message. Otherwise returns 0
+//Adds a user object to the database. If it already exists, returns a message. Otherwise returns 0
 module.exports.createUser = async (user) =>{
     try {
         validateUser(user);
@@ -33,7 +33,7 @@ module.exports.createUser = async (user) =>{
 
     await client.$disconnect();
 
-    return 0
+    return 0;
 }
 
 //Updates a user. If no matching user exists, returns a message. Otherwise returns 0
@@ -61,28 +61,50 @@ module.exports.updateUser = async (user) =>{
     return 0;
 }
 
-//Adds a song to the database. If it already exists, returns a message. Otherwise, returns 0
-async function addSong(song, client){
+//Adds a song object to the database. If it already exists, returns a message. Otherwise returns 0
+module.exports.createSong = async (song) =>{
     try {
         validateSong(song);
     } catch (err) {
         throw err
     }
 
-    let exists = await client.songs.findUnique({
+    let client = new PrismaClient();
+    if(await findSong(song.song_uri, client)){
+        return "Song with this uri already exists.";
+    }
+
+    await client.songs.create({
+        data: song
+    });
+
+    await client.$disconnect();
+
+    return 0;
+}
+
+//Updates a song. If no matching song exists, returns a message. Otherwise returns 0
+module.exports.updateSong = async (song) =>{
+    try {
+        validateSong(song);
+    } catch (err) {
+        throw err
+    }
+
+    let client = new PrismaClient();
+    if(!findSong(song.song_uri, client)){
+        return "Error: No song with this id.";
+    }
+
+    retVal = await client.songs.update({
+        data: song,
         where: {
             song_uri: song.song_uri
         }
     })
-    if(exists === null){
-        retVal = await client.songs.create({
-            data: song
-        });
-    }
-    else{
-        return "Song already exists.";
-    }
-    
+
+    await client.$disconnect();
+
     return 0;
 }
 
@@ -92,11 +114,7 @@ If there's no response with this song+user combination, it inserts the response.
 If there's already a response with this song+user combo, it updates that response with
 the new data and the current date.*/
 module.exports.processResponse = async (affectData, user, song) =>{
-    try {
-        validateResponse(affectData);
-    } catch (err) {
-        throw err
-    }
+    validateResponse(affectData);
 
     let retVal;
     let client = new PrismaClient();
@@ -113,7 +131,7 @@ module.exports.processResponse = async (affectData, user, song) =>{
 
         //Add the song and user if they don't exist
         await module.exports.createUser(user);
-        await addSong(song, client);
+        await module.exports.createSong(song);
 
         retVal = await client.responses.create({
             data: {
