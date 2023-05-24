@@ -1,5 +1,5 @@
 model responses {
-  user_id             Int
+  user_id             String    @db.VarChar(255)
   song_uri            String    @db.VarChar(255)
   valence             Float[]   @db.Real
   arousal             Float[]   @db.Real
@@ -24,7 +24,7 @@ model songs {
 }
 
 model users {
-  user_id          Int         @id
+  user_id          String      @id @db.VarChar(255)
   age              Int?
   gender           String?     @db.VarChar(255)
   location         String?     @db.VarChar(255)
