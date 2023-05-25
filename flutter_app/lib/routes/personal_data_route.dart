@@ -186,13 +186,12 @@ class _PersonalDataRouteState extends State<PersonalDataRoute> {
                               var url = Uri.https(
                                   'qzb9rm0k6c.execute-api.us-west-2.amazonaws.com',
                                   'test/resource');
-                              Random rand = Random();
+
                               await http.put(url,
                                   body: jsonEncode({
                                     "table": "users",
                                     "user_data": {
-                                      "user_id": rand
-                                          .nextInt(9999).toString(),
+                                      "user_id": widget.uuid,
                                       "age": int.parse(ageController.text),
                                       "gender": genderController.text,
                                       "location": locationController.text,
@@ -203,7 +202,7 @@ class _PersonalDataRouteState extends State<PersonalDataRoute> {
                                     }
                                   }));
 
-                              widget.preferences.setBool(widget.uuid, false);
+                              widget.preferences.setBool(widget.uuid, true);
                               widget.updateState();
                             },
                             child: const Text("Save")),

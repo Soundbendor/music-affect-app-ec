@@ -1,5 +1,4 @@
 //source:https://medium.flutterdevs.com/creating-a-countdown-timer-using-animation-in-flutter-2d56d4f3f5f1 
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
@@ -21,10 +20,10 @@ class Timer extends StatefulWidget {
 }
 
 class _Timerr extends State<Timer> with TickerProviderStateMixin {
-  AnimationController controller;
+  late AnimationController controller;
 
   String get timerS {
-    Duration duration = controller.duration * controller.value;
+    Duration duration = controller.duration! * controller.value;
     return '${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
@@ -41,14 +40,14 @@ class _Timerr extends State<Timer> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     //ThemeData themeData = Theme.of(context);
     return Scaffold(
-      backgroundColor: Color(0xffffffff),
+      backgroundColor: const Color(0xffffffff),
       body: AnimatedBuilder(
           animation: controller,
           builder: (context, child) {
             return Stack(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -64,7 +63,7 @@ class _Timerr extends State<Timer> with TickerProviderStateMixin {
                                 children: <Widget>[
                                   Text(
                                     timerS,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 112.0, color: Colors.black),
                                   ),
                                 ],
@@ -78,9 +77,9 @@ class _Timerr extends State<Timer> with TickerProviderStateMixin {
                           builder: (context, child) {
                             return FloatingActionButton.extended(
                                 onPressed: () {
-                                  if (controller.isAnimating)
+                                  if (controller.isAnimating) {
                                     controller.stop();
-                                  else {
+                                  } else {
                                     controller.reverse(
                                         from: controller.value == 0.0
                                             ? 1.0
