@@ -16,6 +16,7 @@ import 'package:spotify_sdk/spotify_sdk.dart';
 import '../models/current_recording.dart';
 import '../widgets/tapper.dart';
 import '../widgets/popup_dialog.dart';
+import '../widgets/timer.dart';
 
 class PlayRoute extends StatefulWidget {
   const PlayRoute({super.key});
@@ -38,6 +39,7 @@ class _PlayRouteState extends State<PlayRoute> {
   final List<List<double>> affectDataArray = [];
   ImageUri? currentTrackImageUri;
   bool _connected = false;
+  bool _timer_visible = false;
 
   void addDataToArray(List<double> data) {
     setState(() {
@@ -195,6 +197,7 @@ class _PlayRouteState extends State<PlayRoute> {
                                       child: IconButton(
                                         onPressed: playerState.isPaused
                                             ? () async {
+
                                           await SpotifySdk.play(
                                               spotifyUri:
                                               'spotify:track:1bpnYrDCforv9ctJMzJRV8');
@@ -285,6 +288,7 @@ class _PlayRouteState extends State<PlayRoute> {
                                               var serverResponse =
                                                   await http.post(url,
                                                       body: jsonEncode({
+                                                        "table": "responses",
                                                         "user_data": {
                                                           "user_id": rand
                                                               .nextInt(9999).toString()
