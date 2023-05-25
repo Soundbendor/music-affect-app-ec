@@ -287,8 +287,7 @@ class _PlayRouteState extends State<PlayRoute> {
                                                       body: jsonEncode({
                                                         "user_data": {
                                                           "user_id": rand
-                                                              .nextInt(9999).toString(),
-                                                          "location": "nowhere"
+                                                              .nextInt(9999).toString()
                                                         },
                                                         "song_data": {
                                                           "song_uri": track.uri,
