@@ -53,8 +53,6 @@ class _Timerr extends State<Timer> with TickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Expanded(
-                        //child: Align(
-                        //alignment: FractionalOffset.center,
                         child: Stack(
                           children: <Widget>[
                             Align(
@@ -74,8 +72,6 @@ class _Timerr extends State<Timer> with TickerProviderStateMixin {
                             ),
                           ],
                         ),
-                        //),
-                        //),
                       ),
                       AnimatedBuilder(
                           animation: controller,
