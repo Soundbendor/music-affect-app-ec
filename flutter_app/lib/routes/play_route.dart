@@ -198,9 +198,7 @@ class _PlayRouteState extends State<PlayRoute> {
                                         onPressed: playerState.isPaused
                                             ? () async {
 
-                                          await SpotifySdk.play(
-                                              spotifyUri:
-                                              'spotify:track:1bpnYrDCforv9ctJMzJRV8');
+                                          await SpotifySdk.resume();
 
                                           setCurrentRecordingTrack(
                                               track);
