@@ -1,5 +1,8 @@
+import 'dart:math';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class PersonalDataRoute extends StatefulWidget {
   final SharedPreferences preferences;
@@ -176,9 +179,32 @@ class _PersonalDataRouteState extends State<PersonalDataRoute> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               widget.preferences
                                   .setBool('hasFilledOutPersonalData', true);
+
+                              var url = Uri.https(
+                                  'qzb9rm0k6c.execute-api.us-west-2.amazonaws.com',
+                                  'test/resource');
+                              Random rand = Random();
+                              await http.put(url,
+                                  body: jsonEncode({
+                                    "table": "users",
+                                    "user_data": {
+                                      "user_id": rand
+                                          .nextInt(9999).toString(),
+                                      "age": int.parse(ageController.text),
+                                      "gender": genderController.text,
+                                      "location": locationController.text,
+                                      "primary_language": primaryLanguageController.text,
+                                      "listening_habits": listeningHabitsController.text,
+                                      "music_experience": musicExperienceController.text,
+                                      "hearing_loss": hearingLossController.text,
+                                    }
+                                  }));
+
+                              widget.preferences.setBool(widget.uuid, false);
+                              widget.updateState();
                             },
                             child: const Text("Save")),
                         MaterialButton(
