@@ -26,68 +26,66 @@ class _Timerr extends State<Timer> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     //ThemeData themeData = Theme.of(context);
-    return Scaffold(
-      backgroundColor: Color(0xffffffff),
-      body: AnimatedBuilder(
-          animation: controller,
-          builder: (context, child) {
-            return Column(
-              children: [Row(
-                  children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: Stack(
-                          children: <Widget>[
-                            Align(
-                              alignment: FractionalOffset.center,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    timerS,
-                                    style: TextStyle(
-                                        fontSize: 112.0, color: Colors.black),
-                                  ),
-                                ],
-                              ),
+
+    return Column(
+        children: [Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                      Stack(
+                        children: <Widget>[
+                          Align(
+                            alignment: FractionalOffset.center,
+                            child: Column(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  timerS,
+                                  style: TextStyle(
+                                      fontSize: 112.0, color: Colors.black),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      AnimatedBuilder(
-                          animation: controller,
-                          builder: (context, child) {
-                            return FloatingActionButton.extended(
-                                onPressed: () {
-                                  if (controller.isAnimating)
-                                    controller.stop();
-                                  else {
-                                    controller.reverse(
-                                        from: controller.value == 0.0
-                                            ? 1.0
-                                            : controller.value);
-                                  }
-                                },
-                                icon: Icon(controller.isAnimating
-                                    ? Icons.pause
-                                    : Icons.play_arrow),
-                                label: Text(
-                                    controller.isAnimating ? "Pause" : "Play"));
-                          }),
-                    ],
-                  ),
+                          ),
+                        ],
+
+                    ),
+                    AnimatedBuilder(
+                        animation: controller,
+                        builder: (context, child) {
+                          return FloatingActionButton.extended(
+                              onPressed: () {
+                                if (controller.isAnimating)
+                                  controller.stop();
+                                else {
+                                  controller.reverse(
+                                      from: controller.value == 0.0
+                                          ? 1.0
+                                          : controller.value);
+                                }
+                              },
+                              icon: Icon(controller.isAnimating
+                                  ? Icons.pause
+                                  : Icons.play_arrow),
+                              label: Text(
+                                  controller.isAnimating ? "Pause" : "Play"));
+                        }),
+                  ],
                 ),
-              ]),
-            ]);
-          }),
-    );
-  }
-}
+              ),
+            ]),
+        ]);
+  }}
