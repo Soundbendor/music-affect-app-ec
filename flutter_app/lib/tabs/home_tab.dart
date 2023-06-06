@@ -3,7 +3,8 @@ import 'package:flutter_app/colors/osu_colors.dart';
 import 'package:flutter_app/routes/play_route.dart';
 
 class HomeTab extends StatelessWidget {
-  const HomeTab({super.key});
+  final String uid;
+  const HomeTab({super.key, required this.uid});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class HomeTab extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const PlayRoute()),
+                MaterialPageRoute(builder: (context) => PlayRoute(uid: uid)),
               );
             },
           )),

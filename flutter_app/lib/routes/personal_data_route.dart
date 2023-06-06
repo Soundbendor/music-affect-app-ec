@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,12 +5,12 @@ import 'package:http/http.dart' as http;
 
 class PersonalDataRoute extends StatefulWidget {
   final SharedPreferences preferences;
-  final String uuid;
+  final String uid;
   final void Function() updateState;
   const PersonalDataRoute(
       {Key? key,
       required this.preferences,
-      required this.uuid,
+      required this.uid,
       required this.updateState})
       : super(key: key);
 
@@ -191,7 +190,7 @@ class _PersonalDataRouteState extends State<PersonalDataRoute> {
                                   body: jsonEncode({
                                     "table": "users",
                                     "user_data": {
-                                      "user_id": widget.uuid,
+                                      "user_id": widget.uid,
                                       "age": int.parse(ageController.text),
                                       "gender": genderController.text,
                                       "location": locationController.text,
@@ -202,13 +201,13 @@ class _PersonalDataRouteState extends State<PersonalDataRoute> {
                                     }
                                   }));
 
-                              widget.preferences.setBool(widget.uuid, true);
+                              widget.preferences.setBool(widget.uid, true);
                               widget.updateState();
                             },
                             child: const Text("Save")),
                         MaterialButton(
                             onPressed: () {
-                                widget.preferences.setBool(widget.uuid, false);
+                                widget.preferences.setBool(widget.uid, false);
                                 widget.updateState();
                             },
                             child: const Text("Skip")),

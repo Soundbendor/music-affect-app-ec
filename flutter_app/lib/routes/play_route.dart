@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'package:flutter_app/colors/color_blind_safe_colors.dart';
 import 'package:flutter_app/colors/osu_colors.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -19,7 +18,8 @@ import '../widgets/popup_dialog.dart';
 import '../widgets/timer.dart';
 
 class PlayRoute extends StatefulWidget {
-  const PlayRoute({super.key});
+  final String uid;
+  const PlayRoute({super.key, required this.uid});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -263,7 +263,6 @@ class _PlayRouteState extends State<PlayRoute> {
                                               var url = Uri.https(
                                                   'qzb9rm0k6c.execute-api.us-west-2.amazonaws.com',
                                                   'test/resource');
-                                              Random rand = Random();
 
                                               var valence = [];
                                               var arousal = [];
@@ -288,8 +287,7 @@ class _PlayRouteState extends State<PlayRoute> {
                                                       body: jsonEncode({
                                                         "table": "responses",
                                                         "user_data": {
-                                                          "user_id": rand
-                                                              .nextInt(9999).toString()
+                                                          "user_id": widget.uid
                                                         },
                                                         "song_data": {
                                                           "song_uri": track.uri,

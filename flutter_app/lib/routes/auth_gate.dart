@@ -23,14 +23,18 @@ class _AuthGateState extends State<AuthGate> {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
+        // no data, means the user is not signed in
         if (!snapshot.hasData) {
           return const SignInRoute();
         }
-
+        // when a user has left the preferences page by skipping or saving data,
+        // we use shared preferences to save a boolean with the uid as the key
+        // here we check for it, if it does not exist we take the user to the
+        // PersonalDataRoute widget
         if (widget.preferences.getBool(snapshot.data?.uid ?? "") == null) {
           return PersonalDataRoute(
             preferences: widget.preferences,
-            uuid: snapshot.data?.uid ?? '',
+            uid: snapshot.data?.uid ?? '',
             updateState: () => setState(() {}),
           );
         }
@@ -58,9 +62,9 @@ class _AuthGateState extends State<AuthGate> {
                     ),
                   ],
                 ),
-                body: const Padding(
-                  padding: EdgeInsets.all(10),
-                  child: TabBarView(children: [HomeTab(), TutorialTab()]),
+                body: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: TabBarView(children: [HomeTab(uid: snapshot.data?.uid ?? ''), const TutorialTab()]),
                 )));
       },
     );
