@@ -3,18 +3,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Timer(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
 class Timer extends StatefulWidget {
   @override
   _Timerr createState() => _Timerr();
@@ -45,8 +33,9 @@ class _Timerr extends State<Timer> with TickerProviderStateMixin {
       body: AnimatedBuilder(
           animation: controller,
           builder: (context, child) {
-            return Stack(
-              children: <Widget>[
+            return Column(
+              children: [Row(
+                  children: [
                 Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Column(
@@ -96,8 +85,8 @@ class _Timerr extends State<Timer> with TickerProviderStateMixin {
                     ],
                   ),
                 ),
-              ],
-            );
+              ]),
+            ]);
           }),
     );
   }
