@@ -261,8 +261,8 @@ class _PlayRouteState extends State<PlayRoute> {
                                         TextButton(
                                             onPressed: () async {
                                               var url = Uri.https(
-                                                  'qzb9rm0k6c.execute-api.us-west-2.amazonaws.com',
-                                                  'test/resource');
+                                                  'https://yov8q0eak6.execute-api.us-west-2.amazonaws.com',
+                                                  '/default/MusicAffectDataCollection');
 
                                               var valence = [];
                                               var arousal = [];
