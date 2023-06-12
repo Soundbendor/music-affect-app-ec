@@ -1,5 +1,5 @@
 const { PrismaClient } = require('@prisma/client')
-const { findUser } = require('./read_data')
+const { findUser, findSong } = require('./read_data')
 
 module.exports.deleteUser = async (user_id) => {
     let client = new PrismaClient
